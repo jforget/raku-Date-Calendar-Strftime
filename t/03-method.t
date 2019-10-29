@@ -4,14 +4,22 @@ use Date::Calendar::Strftime;
 
 class Date::Calendar::Check
  does Date::Calendar::Strftime {
-  method day-name   { "monday" }
-  method month-name { "january" }
+  method year        { 2001 }
+  method month       { 1 }
+  method month-name  { "january" }
+  method month-abbr  { "jan" }
+  method day         { 1 }
+  method day-name    { "monday" }
+  method day-abbr    { "mon" }
+  method day-of-year { 1 }
 }
 
-my @tests = (   ("%3d whatever %-4d", "%3d whatever %-4d"       )
-              , ("%A whatever %B"   , "monday whatever january" )
-              , ("%% whatever %B"   , "% whatever january"      )
-              , ("%%%A whatever %B" , "%monday whatever january")
+my @tests = (   ("%3z whatever %-4z"   , "%3z whatever %-4z"       )
+              , ("%A whatever %B"      , "monday whatever january" )
+              , ("%% whatever %B"      , "% whatever january"      )
+              , ("%%%A whatever %B"    , "%monday whatever january")
+              , ("%a %b %d %e %f %j %m", "mon jan 01  1  1 001 01")
+              , ("%F %G %L %Y"         , "2001-01-01 2001 2001 2001")
             );
 plan @tests.elems;
 my Date::Calendar::Check $d .= new;

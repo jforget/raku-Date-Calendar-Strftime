@@ -39,9 +39,21 @@ my class re-format {
 }
 
 method strftime(Str $format) {
-  my %formatter = %(  n => -> { "\n" },
+  my %formatter = %(  a => -> { $.day-abbr },
                       A => -> { $.day-name },
+                      b => -> { $.month-abbr },
                       B => -> { $.month-name },
+                      d => -> { sprintf("%02d", $.day) },
+                      e => -> { sprintf("%2d",  $.day) },
+                      f => -> { sprintf("%2d",  $.month) },
+                      F => -> { $.strftime("%Y-%m-%d") },
+                      G => -> { sprintf("%04d", $.year) },
+                      j => -> { sprintf("%03d", $.day-of-year) },
+                      L => -> { sprintf("%04d", $.year) },
+                      m => -> { sprintf("%02d", $.month) },
+                      n => -> { "\n" },
+                      t => -> { "\t" },
+                      Y => -> { sprintf("%04d", $.year) },
                    );
   %formatter<%> = -> { '%' };
   my @res = gather prt-format.parse($format, actions => re-format.new);
