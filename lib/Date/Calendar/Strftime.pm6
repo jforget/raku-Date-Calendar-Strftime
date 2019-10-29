@@ -7,13 +7,15 @@ my grammar prt-format {
   token minus      { '-' }
   token zero       { '0' }
   token one-nine   { <[1..9]> }
+  token echo-oscar { <[EO]> }
   token type       { <-[-0..9]> }
   regex zero-nine  { <zero> | <one-nine> }
   regex align      { <minus> ? }
   regex fill       { <zero> ? }
   regex number     { <one-nine> <zero-nine> * }
   regex length     { <number> ? }
-  regex format     { <percent> <align> <fill> <length> <type> }
+  regex alternate  { <echo-oscar> ? }
+  regex format     { <percent> <align> <fill> <length> <alternate> <type> }
   regex substring  { <except-pct> + }
   regex element    { <format> | <substring> }
   regex TOP        { <element> * }
@@ -28,10 +30,16 @@ my class re-format {
   method align($/)      { make $/.values[0].made // ''; }
   method fill($/)       { make $/.values[0].made // ''; }
   method number($/)     { make [~] $<one-nine>.made, |$<zero-nine>».made; }
-  method length($/) 	{ make $/.values[0].made // ''; }
+  method length($/)     { make $/.values[0].made // ''; }
+  method alternate($/)  { make $/.values[0].made // ''; }
   method format($/) {
-    my $fall-back = sprintf("%%%s%s%s%s", $<align>.made, $<fill>.made, $<length>.made, $<type>.made);
-    take %( :align($<align>.made), :fill($<fill>.made), :length($<length>.made), :type($<type>.made), :fall-back($fall-back) );
+    my $fall-back = sprintf("%%%s%s%s%s%s", $<align>.made, $<fill>.made, $<length>.made, $<alternate>.made, $<type>.made);
+    take %( :align($<align>.made),
+            :fill($<fill>.made),
+	    :length($<length>.made),
+	    :alternate($<alternate>.made),
+	    :type($<type>.made),
+	    :fall-back($fall-back) );
   }
   method substring($/) {
     take %( :string([~] $<except-pct>».made) );
