@@ -8,8 +8,16 @@ class Date::Calendar::Check
   method month-name { "january" }
 }
 
-plan 1;
+my @tests = (   ("%3d whatever %-4d", "%3d whatever %-4d"       )
+              , ("%A whatever %B"   , "monday whatever january" )
+              , ("%% whatever %B"   , "% whatever january"      )
+              , ("%%%A whatever %B" , "%monday whatever january")
+            );
+plan @tests.elems;
 my Date::Calendar::Check $d .= new;
-is($d.strftime("whatever"), "placeholder");
+for @tests -> $elem {
+  my ($fmt, $expected) = @$elem;
+  is($d.strftime($fmt), $expected);
+}
 
 done-testing;
