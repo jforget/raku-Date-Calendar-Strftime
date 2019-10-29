@@ -38,6 +38,28 @@ my class re-format {
   }
 }
 
+sub reformat(Str $string, $fmt) {
+  my Int $expected-length = $fmt<length>.Int;
+  my Int $actual-length   = $string.chars;
+  if $actual-length ≥ $expected-length {
+    return $string;
+  }
+  my Str $fill;
+  if $fmt<fill> eq '0' {
+    $fill = '0';
+  }
+  else {
+    $fill = ' ';
+  }
+  $fill x= $expected-length - $actual-length;
+  if $fmt<align> eq '-' {
+    return $fill ~ $string;
+  }
+  else {
+    return $string ~ $fill;
+  }
+}
+
 method strftime(Str $format) {
   my %formatter = %(  a => -> { $.day-abbr },
                       A => -> { $.day-name },
@@ -57,9 +79,11 @@ method strftime(Str $format) {
                    );
   %formatter<%> = -> { '%' };
   my @res = gather prt-format.parse($format, actions => re-format.new);
-  @res ==> map -> $fmt { my $res;
+  @res ==> map -> $fmt { my Str $int; # Intermediate string
+                         my Str $res; # Result string
                          if $fmt<string>:exists              { $res = $fmt<string> }
-                         elsif %formatter{$fmt<type>}:exists { $res = %formatter{$fmt<type>}(); }
+                         elsif %formatter{$fmt<type>}:exists { $int = %formatter{$fmt<type>}();
+                                                               $res = reformat($int, $fmt); }
                          else                                { $res = $fmt<fall-back> }
                          $res;
         } ==> my @val;
