@@ -152,6 +152,8 @@ C<strftime> function in C.
 
 =head1 METHOD
 
+There is only one method in the C<Date::Calendar::Strftime> role.
+
 =head2 strftime
 
 Work in progress.
@@ -286,6 +288,78 @@ following methods:
 =item day-of-year
 
 =head2 Specific C<strftime> codes
+
+A C<Date::Calendar::>R<xxx> module can  add its specific formats types
+by specifying a  C<specific-format> method which returns  a hash where
+the keys are the format types and the values are the callbacks used to
+format the date attributes.
+
+Example: a module defines a C<feast> method, which will be inserted in
+string with the C<%Oj> or the C<%*> specifiers. This module defines:
+
+=begin code :lang<perl6>
+
+  method specific-format { %( Oj => { $.feast },
+                             '*' => { $.feast } );
+
+=end code
+
+The same  C<specific-format> method  can also be  used to  override or
+inhibit    existing    standard    specifiers.    For    example,    a
+C<Date::Calendar::>R<xxx>  module  deactivates   the  C<%a>  specifier
+(abbreviated  day) and  overrides  the C<month-abbr>  method with  the
+C<abbreviated-month>  method  (C<%b>   specifier).  This  module  will
+define:
+
+=begin code :lang<perl6>
+
+  method specific-format { %( a  => Nil,
+                              b  => { $.abbreviated-month } );
+
+=end code
+
+Of course, these features can be combined with
+
+=begin code :lang<perl6>
+
+  method specific-format { %( Oj => { $.feast },
+                             '*' => { $.feast },
+                              a  => Nil,
+                              b  => { $.abbreviated-month } );
+
+=end code
+
+So, the  sentence a few paragraphs  above was not completely  true. It
+should actually read:
+
+The  C<Date::Calendar::>R<xxx>  module  must implement  at  least  the
+following methods: [...] except those  that are inhibited or overriden
+with the C<specific-format> method.
+
+=head2 Precedence
+
+When encountering a C<%Ex> specifier,  the following entries are tried
+and the first existing one is selected (let us ignore C<Nil> values in
+the hashes):
+
+=item 1 Entry C<Ex> from C<Date::Calendar::>R<xxx>C<.specific-format>.
+=item 2 Entry C<x>  from C<Date::Calendar::>R<xxx>C<.specific-format>.
+=item 3 Entry C<Ex> from C<%formatter> in C<Date::Calendar::Strftime>
+=item 4 Entry C<x>  from C<%formatter> in C<Date::Calendar::Strftime>
+=item 5 C<fall-back> attribute of the match object, which gives the C<"%Ex"> string.
+
+And similarly for a C<%Ox> specifier.
+
+For a specifier without alternate form, such as C<%x>, the precedence is:
+
+=item 1 Entry C<x> from C<Date::Calendar::>R<xxx>C<.specific-format>.
+=item 2 Entry C<x> from C<%formatter> in C<Date::Calendar::Strftime>
+=item 3 C<fall-back> attribute of the match object, which gives the C<"%x"> string.
+
+In the lists above,  if at any time a hash entry  exists with a C<Nil>
+value, the C<fall-back> attribute is immediately chosen.
+
+=head2 Silly Things and Security Concerns
 
 Work in progress
 
