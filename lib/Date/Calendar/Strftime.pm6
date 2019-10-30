@@ -22,24 +22,24 @@ my grammar prt-format {
 }
 my class re-format {
   method except-pct($/) { make $/.Str; }
-  method minus($/)      { make $/.Str; }
-  method zero($/)       { make $/.Str; }
-  method one-nine($/)   { make $/.Str; }
+  method minus     ($/) { make $/.Str; }
+  method zero      ($/) { make $/.Str; }
+  method one-nine  ($/) { make $/.Str; }
   method echo-oscar($/) { make $/.Str; }
-  method type($/)       { make $/.Str; }
-  method zero-nine($/)  { make $/.values[0].made; }
-  method align($/)      { make $/.values[0].made // ''; }
-  method fill($/)       { make $/.values[0].made // ''; }
-  method number($/)     { make [~] $<one-nine>.made, |$<zero-nine>».made; }
-  method length($/)     { make $/.values[0].made // ''; }
-  method alternate($/)  { make $/.values[0].made // ''; }
+  method type      ($/) { make $/.Str; }
+  method zero-nine ($/) { make $/.values[0].made; }
+  method align     ($/) { make $/.values[0].made // ''; }
+  method fill      ($/) { make $/.values[0].made // ''; }
+  method number    ($/) { make [~] $<one-nine>.made, |$<zero-nine>».made; }
+  method length    ($/) { make $/.values[0].made // ''; }
+  method alternate ($/) { make $/.values[0].made // ''; }
   method format($/) {
     my $fall-back = sprintf("%%%s%s%s%s%s", $<align>.made, $<fill>.made, $<length>.made, $<alternate>.made, $<type>.made);
-    take %( :align($<align>.made),
-            :fill($<fill>.made),
-            :length($<length>.made),
+    take %( :align(    $<align>    .made),
+            :fill(     $<fill>     .made),
+            :length(   $<length>   .made),
             :alternate($<alternate>.made),
-            :type($<type>.made),
+            :type(     $<type>     .made),
             :fall-back($fall-back) );
   }
   method substring($/) {
@@ -174,7 +174,7 @@ long.
 
 A C<strftime> specifier consists of:
 
-=item A percent sign,
+=item A percent sign.
 
 =item An  optional minus sign, to  indicate on which side  the padding
 occurs. If the minus sign is present, the value is aligned to the left
@@ -186,8 +186,8 @@ left.
 char is  present, padding is  done with zeroes.  Else, it is  done wih
 spaces.
 
-=item An optional length, which specifies the minimum length of
-the result substring.
+=item An  optional length, which  specifies the minimum length  of the
+result substring.
 
 =item  An optional  C<"E">  or  C<"O"> modifier.  On  some older  UNIX
 system,  these  were used  to  give  the I<extended>  or  I<localized>
@@ -273,8 +273,8 @@ A literal `%' character.
 
 =head3 C<Date::Calendar::>R<xxx> Requirements
 
-The  C<Date::Calendar::>R<xxx> module must implement at least
-the following methods:
+The  C<Date::Calendar::>R<xxx>  module  must implement  at  least  the
+following methods:
 
 =item year
 =item month
