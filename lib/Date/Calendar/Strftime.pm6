@@ -25,6 +25,7 @@ my class re-format {
   method minus($/)      { make $/.Str; }
   method zero($/)       { make $/.Str; }
   method one-nine($/)   { make $/.Str; }
+  method echo-oscar($/) { make $/.Str; }
   method type($/)       { make $/.Str; }
   method zero-nine($/)  { make $/.values[0].made; }
   method align($/)      { make $/.values[0].made // ''; }
@@ -36,10 +37,10 @@ my class re-format {
     my $fall-back = sprintf("%%%s%s%s%s%s", $<align>.made, $<fill>.made, $<length>.made, $<alternate>.made, $<type>.made);
     take %( :align($<align>.made),
             :fill($<fill>.made),
-	    :length($<length>.made),
-	    :alternate($<alternate>.made),
-	    :type($<type>.made),
-	    :fall-back($fall-back) );
+            :length($<length>.made),
+            :alternate($<alternate>.made),
+            :type($<type>.made),
+            :fall-back($fall-back) );
   }
   method substring($/) {
     take %( :string([~] $<except-pct>».made) );
@@ -87,12 +88,32 @@ method strftime(Str $format) {
                    );
   %formatter<%> = -> { '%' };
   my @res = gather prt-format.parse($format, actions => re-format.new);
-  @res ==> map -> $fmt { my Str $int; # Intermediate string
-                         my Str $res; # Result string
-                         if $fmt<string>:exists              { $res = $fmt<string> }
-                         elsif %formatter{$fmt<type>}:exists { $int = %formatter{$fmt<type>}();
-                                                               $res = reformat($int, $fmt); }
-                         else                                { $res = $fmt<fall-back> }
+  @res ==> map -> $fmt { my Str $res; # Result string
+                         my     $fnc; # Formatter function
+                         my     %dispatch = %(); # empty specific dispatch table
+                         if $.can('specific-format') {
+                           # specific dispatch table with some stuff in it
+                           %dispatch = $.specific-format;
+                         }
+                         if $fmt<string>:!exists {
+                           my $key1 = $fmt<alternate> ~ $fmt<type>;
+                           my $key2 = $fmt<type>;
+                           if %dispatch{$key1}:exists {
+                             $fnc = &%dispatch{$key1};
+                           }
+                           elsif %dispatch{$key2}:exists {
+                             $fnc = &%dispatch{$key2};
+                           }
+                           elsif %formatter{$key1}:exists {
+                             $fnc = &%formatter{$key1};
+                           }
+                           elsif %formatter{$key2}:exists {
+                             $fnc = &%formatter{$key2};
+                           }
+                         }
+                         if $fmt<string>:exists { $res = $fmt<string> }
+                         elsif $fnc             { $res = reformat($fnc(), $fmt); }
+                         else                   { $res = $fmt<fall-back> }
                          $res;
         } ==> my @val;
   return [~] @val;
