@@ -65,6 +65,11 @@ sub reformat(Str $string, $fmt) {
     return $string ~ $fill;
   }
   else {
+    if $string.substr(0, 1)eq '-' && $fmt<fill> eq '0' {
+      # zero-padding of a negative number (with a good-looking result)
+      # or zero-padding of a string beginning with a dash (with a funny result)
+      return '-' ~ $fill ~ $string.substr(1);
+    }
     return $fill ~ $string;
   }
 }
@@ -112,7 +117,7 @@ method strftime(Str $format) {
                            }
                          }
                          if $fmt<string>:exists { $res = $fmt<string> }
-                         elsif $fnc             { $res = reformat($fnc(), $fmt); }
+                         elsif $fnc             { $res = reformat($fnc().Str, $fmt); }
                          else                   { $res = $fmt<fall-back> }
                          $res;
         } ==> my @val;
@@ -178,9 +183,9 @@ A C<strftime> specifier consists of:
 
 =item An  optional minus sign, to  indicate on which side  the padding
 occurs. If the minus sign is present, the value is aligned to the left
-and the padding chars are added to  the right. If it is not there, the
-value is aligned to  the right and the padding chars  are added to the
-left.
+and the padding spaces are added to the right. If it is not there, the
+value is aligned to the right and the padding chars (spaces or zeroes)
+are added to the left.
 
 =item  An optional  zero  digit,  to choose  the  padding  char for  a
 right-aligned left-padded value. If the  zero char is present, padding
@@ -245,7 +250,8 @@ Equivalent to %Y-%m-%d (similar to the ISO 8601 date format for Gregorian dates)
 
 =defn C<%G>
 
-The year as a decimal number. Strictly similar to C<%L> and C<%Y>.
+The year  as a decimal number.  By default, strictly similar  to C<%L>
+and C<%Y>.
 
 =defn C<%j>
 
@@ -253,7 +259,8 @@ The day of the year as a decimal number (usually range 001 to 366).
 
 =defn C<%L>
 
-The year as a decimal number. Strictly similar to C<%G> and C<%Y>.
+The year  as a decimal number.  By default, strictly similar  to C<%G>
+and C<%Y>.
 
 =defn C<%m>
 
@@ -270,7 +277,8 @@ A tab character.
 
 =defn C<%Y>
 
-The year as a decimal number. Strictly similar to C<%G> and C<%L>.
+The year  as a decimal number.  By default, strictly similar  to C<%G>
+and C<%L>.
 
 =defn C<%%>
 
@@ -363,7 +371,7 @@ In the lists above,  if at any time a hash entry  exists with a C<Nil>
 value,  the  C<fall-back>  attribute  is  immediately  chosen  without
 examining the other possibilities.
 
-=head2 Silly Things and Security Concerns
+=head2 Known Bugs, Silly Things and Security Concerns
 
 Make sure the  C<strftime> format string comes from  a trusted origin.
 Here are a few reasons.
@@ -379,17 +387,26 @@ mostly  successful  one, even  if  some  glitches happened  (and  were
 hushed). This does  not mean that twenty years later  you can fallback
 into the old dirty habits of butchering year numbers.
 
+On the other  hand, using unambiguous abbreviations for  day names and
+month names is OK. Be sure there is no ambiguity.
+
 About the optional length, the module does not impose a maximum value.
 A format such  as C<"%123456789A"> is valid and accpted.  Yet, it will
 drain your free RAM very fast. So  do not use such a ridiculous length
 for a single string.
 
-Zero-padding should apply only to numbers  and only to the left of the
-value. Yet, nothing in the module prevents you from padding alphabetic
-strings with zeroes.
+Zero-padding should apply only to  numbers. Yet, nothing in the module
+prevents you from padding alphabetic strings with zeroes.
 
-Numeric values in calendars are rarely negative. If this happens, left
-padding with zeroes will look strange.
+Numeric  values in  calendars are  rarely negative  and string  values
+rarely begin with  a dash. When left-padding with  zeroes, the program
+checks the first char of the value. If  this is a minus sign or a dash
+char, the padding  zeroes are inserted between the minus  sign and the
+rest  of the  value. Thus  negative numbers  look right  (C<"-000123">
+instead of C<"000-123">). At the same  time, a string beginning with a
+dash looks silly  when zero-padded. You cannot have your  cake and eat
+it. Anyhow,  you should not  zero-pad strings, only numbers  should be
+zero-padded.
 
 Work in progress
 
@@ -401,7 +418,7 @@ Jean Forget <JFORGET at cpan dot org>
 
 You can  send me  a mail using  the address above.  Please be  sure to
 include a subject  sufficiently clear and sufficiently  specific to be
-accepted by my spam filter.
+green-flagged by my spam filter.
 
 Or  you can  send a  pull request  to the  Github repository  for this
 module.
