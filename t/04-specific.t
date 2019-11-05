@@ -21,7 +21,7 @@ my @tests = (   ("%F %*"           , "2001-01-01 New year's day")
               , ("%Ej %F"          , "New year's day 2001-01-01")
               , ("%2a %b"          , "%2a %b")                        # standard basic types have been inhibited
               , ("%OA %EB"         , "monday january")                # alternate formats which fall back to basic
-              , (">%12OA< >%-12EB<", ">monday      < >     january<") # same thing with padding
+              , (">%12OA< >%-12EB<", ">      monday< >january     <") # same thing with padding
             );
 plan @tests.elems;
 my Date::Calendar::Check $d .= new;

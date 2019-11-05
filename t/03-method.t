@@ -22,8 +22,8 @@ my @tests = (   ("%3z whatever %-4z"   , "%3z whatever %-4z"       )
               , ("%F %G %L %Y"         , "2001-01-01 2001 2001 2001")
               , ("|%2a| |%-2a| |%02a| |%-02a|", "|mon| |mon| |mon| |mon|")
               , ("|%3a| |%-3a| |%03a| |%-03a|", "|mon| |mon| |mon| |mon|")
-              , ("|%4a| |%-4a| |%04a| |%-04a|", "|mon | | mon| |mon0| |0mon|")
-              , ("|%5a| |%-5a| |%05a| |%-05a|", "|mon  | |  mon| |mon00| |00mon|")
+              , ("|%4a| |%-4a| |%04a| |%-04a|", "| mon| |mon | |0mon| |mon |")
+              , ("|%5a| |%-5a| |%05a| |%-05a|", "|  mon| |mon  | |00mon| |mon  |")
             );
 plan @tests.elems;
 my Date::Calendar::Check $d .= new;

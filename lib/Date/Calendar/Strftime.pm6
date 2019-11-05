@@ -54,7 +54,7 @@ sub reformat(Str $string, $fmt) {
     return $string;
   }
   my Str $fill;
-  if $fmt<fill> eq '0' {
+  if $fmt<fill> eq '0' and $fmt<align> ne '-' {
     $fill = '0';
   }
   else {
@@ -62,10 +62,10 @@ sub reformat(Str $string, $fmt) {
   }
   $fill x= $expected-length - $actual-length;
   if $fmt<align> eq '-' {
-    return $fill ~ $string;
+    return $string ~ $fill;
   }
   else {
-    return $string ~ $fill;
+    return $fill ~ $string;
   }
 }
 
@@ -156,8 +156,6 @@ There is only one method in the C<Date::Calendar::Strftime> role.
 
 =head2 strftime
 
-Work in progress.
-
 This method is  very similar to the homonymous functions  you can find
 in several  languages (C, shell, etc).  It also takes some  ideas from
 C<printf>-similar functions. For example
@@ -184,9 +182,9 @@ and the padding chars are added to  the right. If it is not there, the
 value is aligned to  the right and the padding chars  are added to the
 left.
 
-=item An optional zero digit, to  choose the padding char. If the zero
-char is  present, padding is  done with zeroes.  Else, it is  done wih
-spaces.
+=item  An optional  zero  digit,  to choose  the  padding  char for  a
+right-aligned left-padded value. If the  zero char is present, padding
+is done with zeroes. Else, it is done wih spaces.
 
 =item An  optional length, which  specifies the minimum length  of the
 result substring.
@@ -199,6 +197,11 @@ variants of the date attribute.
 =item A mandatory  type code. A type code is  any character other than
 the  characters used  in the  optional modifiers  above. That  is, any
 character except a digit, a dash, a letter C<"E"> or a letter C<"O">.
+
+The dot-digit optional modifier, used  in C<printf> for numbers with a
+fractional  part,  is not  implemented.  Likewise,  the plus  optional
+modifier, which displays  a plus sign for positive  numeric values, is
+not implemented.
 
 =head2 Standard C<strftime> codes
 
@@ -238,7 +241,7 @@ leading zero is replaced by a space.
 
 =defn C<%F>
 
-Equivalent to %Y-%m-%d (the ISO 8601 date format)
+Equivalent to %Y-%m-%d (similar to the ISO 8601 date format for Gregorian dates)
 
 =defn C<%G>
 
@@ -357,15 +360,51 @@ For a specifier without alternate form, such as C<%x>, the precedence is:
 =item 3 C<fall-back> attribute of the match object, which gives the C<"%x"> string.
 
 In the lists above,  if at any time a hash entry  exists with a C<Nil>
-value, the C<fall-back> attribute is immediately chosen.
+value,  the  C<fall-back>  attribute  is  immediately  chosen  without
+examining the other possibilities.
 
 =head2 Silly Things and Security Concerns
+
+Make sure the  C<strftime> format string comes from  a trusted origin.
+Here are a few reasons.
+
+You should not truncate a numeric value when formatting it. Especially
+a  year. In  the 1950's  and  the 1960's,  when RAM  and storage  were
+expensive, programmers had  a good reason to truncate  numbers and let
+the users guess the missing parts.  But nowadays, kilobytes of RAM and
+storage are several orders of magnitude  cheaper so there is no longer
+any  reason  to  truncate  numbers. Twenty  years  ago,  the  worlwide
+endeavour to  fix the Y2K bug  was a really necessary  endeavour and a
+mostly  successful  one, even  if  some  glitches happened  (and  were
+hushed). This does  not mean that twenty years later  you can fallback
+into the old dirty habits of butchering year numbers.
+
+About the optional length, the module does not impose a maximum value.
+A format such  as C<"%123456789A"> is valid and accpted.  Yet, it will
+drain your free RAM very fast. So  do not use such a ridiculous length
+for a single string.
+
+Zero-padding should apply only to numbers  and only to the left of the
+value. Yet, nothing in the module prevents you from padding alphabetic
+strings with zeroes.
+
+Numeric values in calendars are rarely negative. If this happens, left
+padding with zeroes will look strange.
 
 Work in progress
 
 =head1 AUTHOR
 
 Jean Forget <JFORGET at cpan dot org>
+
+=head1 SUPPORT
+
+You can  send me  a mail using  the address above.  Please be  sure to
+include a subject  sufficiently clear and sufficiently  specific to be
+accepted by my spam filter.
+
+Or  you can  send a  pull request  to the  Github repository  for this
+module.
 
 =head1 COPYRIGHT AND LICENSE
 
