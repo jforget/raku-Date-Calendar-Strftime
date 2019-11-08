@@ -242,11 +242,12 @@ zero is replaced by a space.
 =defn C<%f>
 
 The  month as  a decimal  number (usually  1 to  12). Unlike  C<%m>, a
-leading zero is replaced by a space.
+leading zero is replaced by a space. This is still a 2-char string.
 
 =defn C<%F>
 
-Equivalent to %Y-%m-%d (similar to the ISO 8601 date format for Gregorian dates)
+Equivalent to  C<%Y-%m-%d> (similar  to the ISO  8601 date  format for
+Gregorian dates)
 
 =defn C<%G>
 
@@ -255,7 +256,8 @@ and C<%Y>.
 
 =defn C<%j>
 
-The day of the year as a decimal number (usually range 001 to 366).
+The day of the year as a three-digit decimal number (usually range 001
+to 366).
 
 =defn C<%L>
 
@@ -311,7 +313,7 @@ string with the C<%Oj> or the C<%*> specifiers. This module defines:
 =begin code :lang<perl6>
 
   method specific-format { %( Oj => { $.feast },
-                             '*' => { $.feast } );
+                             '*' => { $.feast } ); }
 
 =end code
 
@@ -325,7 +327,7 @@ define:
 =begin code :lang<perl6>
 
   method specific-format { %( a  => Nil,
-                              b  => { $.abbreviated-month } );
+                              b  => { $.abbreviated-month } ); }
 
 =end code
 
@@ -336,7 +338,7 @@ Of course, these features can be combined with
   method specific-format { %( Oj => { $.feast },
                              '*' => { $.feast },
                               a  => Nil,
-                              b  => { $.abbreviated-month } );
+                              b  => { $.abbreviated-month } ); }
 
 =end code
 
@@ -405,8 +407,8 @@ char, the padding  zeroes are inserted between the minus  sign and the
 rest  of the  value. Thus  negative numbers  look right  (C<"-000123">
 instead of C<"000-123">). At the same  time, a string beginning with a
 dash looks silly  when zero-padded. You cannot have your  cake and eat
-it. Anyhow,  you should not  zero-pad strings, only numbers  should be
-zero-padded.
+it too. Anyhow,  you should not zero-pad strings,  only numbers should
+be zero-padded.
 
 Work in progress
 
