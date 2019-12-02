@@ -19,11 +19,12 @@ my @tests = (   ("%3z whatever %-4z"   , "%3z whatever %-4z"       )
               , ("%% whatever %B"      , "% whatever january"      )
               , ("%%%A whatever %B"    , "%monday whatever january")
               , ("%a %b %d %e %f %j %m", "mon jan 01  1  1 001 01")
-              , ("%F %G %L %Y"         , "2001-01-01 2001 2001 2001")
+              , ("%F %G %L %Y %V %u"   , "2001-01-01 2001 2001 2001 ? ?")
               , ("|%2a| |%-2a| |%02a| |%-02a|", "|mon| |mon| |mon| |mon|")
               , ("|%3a| |%-3a| |%03a| |%-03a|", "|mon| |mon| |mon| |mon|")
               , ("|%4a| |%-4a| |%04a| |%-04a|", "| mon| |mon | |0mon| |mon |")
               , ("|%5a| |%-5a| |%05a| |%-05a|", "|  mon| |mon  | |00mon| |mon  |")
+              , ("|%5u| |%-5u| |%05u| |%-05u|", "|    ?| |?    | |0000?| |?    |")
             );
 plan @tests.elems;
 my Date::Calendar::Check $d .= new;

@@ -19,6 +19,21 @@ say $coup-d'État-fr.strftime("%A %e %B %EY");
 # ---> "octidi 18 Brumaire VIII"
 ```
 
+INSTALLATION
+============
+
+```shell
+zef install Date::Calendar::Strftime
+```
+
+ou bien
+
+```shell
+git clone https://github.com/jforget/raku-Date-Calendar-Strftime.git
+cd raku-Date-Calendar-Strftime
+zef install .
+```
+
 DESCRIPTION
 ===========
 

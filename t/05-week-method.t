@@ -1,0 +1,39 @@
+use v6.c;
+use Test;
+use Date::Calendar::Strftime;
+
+class Date::Calendar::Check
+ does Date::Calendar::Strftime {
+  method year        { 2017 }
+  method month       { 1 }
+  method month-name  { "january" }
+  method month-abbr  { "jan" }
+  method day         { 1 }
+  method day-name    { "sunday" }
+  method day-abbr    { "sun" }
+  method day-of-year { 1 }
+  method day-of-week { 7 }
+  method week-number { 52 }
+  method week-year   { 2016 }
+}
+
+my @tests = (   ("%3z whatever %-4z"   , "%3z whatever %-4z"       )
+              , ("%A whatever %B"      , "sunday whatever january" )
+              , ("%% whatever %B"      , "% whatever january"      )
+              , ("%%%A whatever %B"    , "%sunday whatever january")
+              , ("%a %b %d %e %f %j %m", "sun jan 01  1  1 001 01" )
+              , ("%F %G %L %Y %V %u"   , "2017-01-01 2016 2017 2017 52 7" )
+              , ("|%2a| |%-2a| |%02a| |%-02a|", "|sun| |sun| |sun| |sun|")
+              , ("|%3a| |%-3a| |%03a| |%-03a|", "|sun| |sun| |sun| |sun|")
+              , ("|%4a| |%-4a| |%04a| |%-04a|", "| sun| |sun | |0sun| |sun |")
+              , ("|%5a| |%-5a| |%05a| |%-05a|", "|  sun| |sun  | |00sun| |sun  |")
+              , ("|%5u| |%-5u| |%05u| |%-05u|", "|    7| |7    | |00007| |7    |")
+            );
+plan @tests.elems;
+my Date::Calendar::Check $d .= new;
+for @tests -> $elem {
+  my ($fmt, $expected) = @$elem;
+  is($d.strftime($fmt), $expected);
+}
+
+done-testing;

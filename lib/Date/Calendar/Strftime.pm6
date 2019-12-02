@@ -83,12 +83,17 @@ method strftime(Str $format) {
                       e => -> { sprintf("%2d",  $.day) },
                       f => -> { sprintf("%2d",  $.month) },
                       F => -> { $.strftime("%Y-%m-%d") },
-                      G => -> { sprintf("%04d", $.year) },
+                      G => -> { if $.can('week-year') { sprintf("%04d", $.week-year) }
+                                else                  { sprintf("%04d", $.year     ) } },
                       j => -> { sprintf("%03d", $.day-of-year) },
                       L => -> { sprintf("%04d", $.year) },
                       m => -> { sprintf("%02d", $.month) },
                       n => -> { "\n" },
                       t => -> { "\t" },
+                      u => -> { if $.can('day-of-week') { sprintf("%d", $.day-of-week) }
+                                else                    { '?' } },
+                      V => -> { if $.can('week-number') { sprintf("%02d", $.week-number) }
+                                else                    { '?' } },
                       Y => -> { sprintf("%04d", $.year) },
                    );
   %formatter<%> = -> { '%' };
@@ -252,7 +257,11 @@ Gregorian dates)
 =defn C<%G>
 
 The year  as a decimal number.  By default, strictly similar  to C<%L>
-and C<%Y>.
+and C<%Y>. If the calendar has a concept of week or similar and if the
+week  is not  synchronised with  the  year, this  formatter gives  the
+number of  the "quasi-year" as  defined by ISO-8601 for  the so-called
+"ISO   date"   for   Gregorian  dates.   This   "quasi-year"   (method
+C<week-year>) is synchronised with the week.
 
 =defn C<%j>
 
@@ -276,6 +285,28 @@ A newline character.
 =defn C<%t>
 
 A tab character.
+
+=defn C<%u>
+
+If the calendar has  a notion of week, this formatter  give the day of
+week as a 1..7 number (or some  other range if the week-concept is not
+exactly a week).
+
+If  the calendar  has no  week-like notion,  this formatter  returns a
+question mark.
+
+=defn C<%V>
+
+If the calendar has a notion  of week or similar, this formatter gives
+the week  number. If the week  and the year are  not synchronised, the
+week number is defined in a fashion  similar to the week number in the
+so-called "ISO  date" format  for Gregorian  dates.
+
+For the Gregorian calendar, this number is within the 1..53 range. For
+other calendars, the range may be different.
+
+If  the calendar  has no  week-like notion,  this formatter  returns a
+question mark.
 
 =defn C<%Y>
 
@@ -393,7 +424,7 @@ On the other  hand, using unambiguous abbreviations for  day names and
 month names is OK. Be sure there is no ambiguity.
 
 About the optional length, the module does not impose a maximum value.
-A format such  as C<"%123456789A"> is valid and accpted.  Yet, it will
+A format such as C<"%123456789A"> is  valid and accepted. Yet, it will
 drain your free RAM very fast. So  do not use such a ridiculous length
 for a single string.
 
@@ -409,8 +440,6 @@ instead of C<"000-123">). At the same  time, a string beginning with a
 dash looks silly  when zero-padded. You cannot have your  cake and eat
 it too. Anyhow,  you should not zero-pad strings,  only numbers should
 be zero-padded.
-
-Work in progress
 
 =head1 AUTHOR
 
