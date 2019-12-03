@@ -91,9 +91,9 @@ method strftime(Str $format) {
                       n => -> { "\n" },
                       t => -> { "\t" },
                       u => -> { if $.can('day-of-week') { sprintf("%d", $.day-of-week) }
-                                else                    { '?' } },
+                                else                    { Nil } },
                       V => -> { if $.can('week-number') { sprintf("%02d", $.week-number) }
-                                else                    { '?' } },
+                                else                    { Nil } },
                       Y => -> { sprintf("%04d", $.year) },
                    );
   %formatter<%> = -> { '%' };
@@ -122,7 +122,10 @@ method strftime(Str $format) {
                            }
                          }
                          if $fmt<string>:exists { $res = $fmt<string> }
-                         elsif $fnc             { $res = reformat($fnc().Str, $fmt); }
+                         elsif $fnc             { my $res1 = $fnc();
+                                                  if $res1.gist eq '(Any)' { $res = $fmt<fall-back> }
+                                                  else                     { $res = reformat($res1.Str, $fmt); }
+                                                }
                          else                   { $res = $fmt<fall-back> }
                          $res;
         } ==> my @val;
@@ -290,10 +293,11 @@ A tab character.
 
 If the calendar has  a notion of week, this formatter  give the day of
 week as a 1..7 number (or some  other range if the week-concept is not
-exactly a week).
+exactly a 7-day week).
 
-If  the calendar  has no  week-like notion,  this formatter  returns a
-question mark.
+If the calendar has no week-like notion, this formatter returns itself
+C<"%u"> (or possibly with its  would-be length and padding codes, like
+C<"%-3u">).
 
 =defn C<%V>
 
@@ -305,8 +309,9 @@ so-called "ISO  date" format  for Gregorian  dates.
 For the Gregorian calendar, this number is within the 1..53 range. For
 other calendars, the range may be different.
 
-If  the calendar  has no  week-like notion,  this formatter  returns a
-question mark.
+If the calendar has no week-like notion, this formatter returns itself
+C<"%V"> (or possibly with its  would-be length and padding codes, like
+C<"%05V">).
 
 =defn C<%Y>
 
