@@ -75,10 +75,15 @@ sub reformat(Str $string, $fmt) {
 }
 
 method strftime(Str $format) {
-  my %formatter = %(  a => -> { $.day-abbr },
-                      A => -> { $.day-name },
+  my %formatter = %(  a => -> { if $.can('day-abbr') { $.day-abbr }
+                                else                 { Nil } },
+                      A => -> { if $.can('day-name') { $.day-name }
+                                else                 { Nil } },
                       b => -> { $.month-abbr },
-                      B => -> { $.month-name },
+                      b => -> { if $.can('month-abbr') { $.month-abbr }
+                                else                   { Nil } },
+                      B => -> { if $.can('month-name') { $.month-name }
+                                else                   { Nil } },
                       d => -> { sprintf("%02d", $.day) },
                       e => -> { sprintf("%2d",  $.day) },
                       f => -> { sprintf("%2d",  $.month) },
@@ -108,18 +113,10 @@ method strftime(Str $format) {
                          if $fmt<string>:!exists {
                            my $key1 = $fmt<alternate> ~ $fmt<type>;
                            my $key2 = $fmt<type>;
-                           if %dispatch{$key1}:exists {
-                             $fnc = &%dispatch{$key1};
-                           }
-                           elsif %dispatch{$key2}:exists {
-                             $fnc = &%dispatch{$key2};
-                           }
-                           elsif %formatter{$key1}:exists {
-                             $fnc = &%formatter{$key1};
-                           }
-                           elsif %formatter{$key2}:exists {
-                             $fnc = &%formatter{$key2};
-                           }
+                           if    %dispatch{$key1}:exists  { $fnc = &%dispatch{$key1 }; }
+                           elsif %dispatch{$key2}:exists  { $fnc = &%dispatch{$key2 }; }
+                           elsif %formatter{$key1}:exists { $fnc = &%formatter{$key1}; }
+                           elsif %formatter{$key2}:exists { $fnc = &%formatter{$key2}; }
                          }
                          if $fmt<string>:exists { $res = $fmt<string> }
                          elsif $fnc             { my $res1 = $fnc();
@@ -136,7 +133,7 @@ method strftime(Str $format) {
 
 =head1 NAME
 
-Date::Calendar::Strftime - formatting any Date::Calendar::whatever date with 'strftime'
+Date::Calendar::Strftime - formatting any Date or Date::Calendar::whatever object with 'strftime'
 
 =head1 SYNOPSIS
 
@@ -157,11 +154,26 @@ say $Bonaparte's-coup-fr.strftime("%A %e %B %EY");
 
 =end code
 
+Another example, with the C<Date> core module
+
+=begin code :lang<perl6>
+
+use Date::Calendar::Strftime;
+my Date $last-day .= new(2019, 12, 31);
+$last-day does Date::Calendar::Strftime;
+say $last-day.strftime("%Y-%m-%d %G-W%V-%u");
+# --> 2019-12-31 2020-W01-2
+
+=end code
+
 =head1 DESCRIPTION
 
 Date::Calendar::Strftime is  a role providing a  C<strftime> method to
 format a string  representing the date. This method is  similar to the
 C<strftime> function in C.
+
+This role applies to any  C<Date::Calendar::>R<xxx> module, as well as
+the C<Date> core module.
 
 =head1 METHOD
 
@@ -226,17 +238,29 @@ provided by the calling C<Date::Calendar::>R<xxx> module.
 
 The abbreviated name of the day of week.
 
+If not  defined (as with  the C<Date>  core module), the  formatter is
+returned as is.
+
 =defn C<%A>
 
 The full name of the day of week.
+
+If not  defined (as with  the C<Date>  core module), the  formatter is
+returned as is.
 
 =defn C<%b>
 
 The abbreviated month name.
 
+If not  defined (as with  the C<Date>  core module), the  formatter is
+returned as is.
+
 =defn C<%B>
 
 The full month name.
+
+If not  defined (as with  the C<Date>  core module), the  formatter is
+returned as is.
 
 =defn C<%d>
 
@@ -329,12 +353,19 @@ following methods:
 
 =item year
 =item month
+=item day
+=item day-of-year
+
+The  C<Date::Calendar::>R<xxx>   module  should  also   implement  the
+following methods if possible:
+
 =item month-name
 =item month-abbr
-=item day
 =item day-name
 =item day-abbr
-=item day-of-year
+=item day-of-week
+=item week-number
+=item week-year
 
 =head2 Specific C<strftime> codes
 

@@ -19,6 +19,14 @@ say $Bonaparte's-coup-fr.strftime("%A %e %B %EY");
 # ---> "octidi 18 Brumaire VIII"
 ```
 
+```perl6
+use Date::Calendar::Strftime;
+my Date $last-day .= new(2019, 12, 31);
+$last-day does Date::Calendar::Strftime;
+say $last-day.strftime("%Y-%m-%d %G-W%V-%u");
+# --> 2019-12-31 2020-W01-2
+```
+
 INSTALLATION
 ============
 
