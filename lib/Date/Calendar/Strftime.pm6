@@ -75,15 +75,10 @@ sub reformat(Str $string, $fmt) {
 }
 
 method strftime(Str $format) {
-  my %formatter = %(  a => -> { if $.can('day-abbr') { $.day-abbr }
-                                else                 { Nil } },
-                      A => -> { if $.can('day-name') { $.day-name }
-                                else                 { Nil } },
-                      b => -> { $.month-abbr },
-                      b => -> { if $.can('month-abbr') { $.month-abbr }
-                                else                   { Nil } },
-                      B => -> { if $.can('month-name') { $.month-name }
-                                else                   { Nil } },
+  my %formatter = %(  a => -> { if $.can('day-abbr')   { $.day-abbr }   else { Nil } },
+                      A => -> { if $.can('day-name')   { $.day-name }   else { Nil } },
+                      b => -> { if $.can('month-abbr') { $.month-abbr } else { Nil } },
+                      B => -> { if $.can('month-name') { $.month-name } else { Nil } },
                       d => -> { sprintf("%02d", $.day) },
                       e => -> { sprintf("%2d",  $.day) },
                       f => -> { sprintf("%2d",  $.month) },
@@ -95,10 +90,8 @@ method strftime(Str $format) {
                       m => -> { sprintf("%02d", $.month) },
                       n => -> { "\n" },
                       t => -> { "\t" },
-                      u => -> { if $.can('day-of-week') { sprintf("%d", $.day-of-week) }
-                                else                    { Nil } },
-                      V => -> { if $.can('week-number') { sprintf("%02d", $.week-number) }
-                                else                    { Nil } },
+                      u => -> { if $.can('day-of-week') { sprintf("%d",   $.day-of-week) } else { Nil } },
+                      V => -> { if $.can('week-number') { sprintf("%02d", $.week-number) } else { Nil } },
                       Y => -> { sprintf("%04d", $.year) },
                    );
   %formatter<%> = -> { '%' };
@@ -133,28 +126,11 @@ method strftime(Str $format) {
 
 =head1 NAME
 
-Date::Calendar::Strftime - formatting any Date or Date::Calendar::whatever object with 'strftime'
+Date::Calendar::Strftime - formatting any Date object or Date::Calendar::whatever object with 'strftime'
 
 =head1 SYNOPSIS
 
-This example uses the French Revolutionary calendar
-
-=begin code :lang<perl6>
-
-use Date::Calendar::Strftime;
-use Date::Calendar::FrenchRevolutionary;
-my Date::Calendar::FrenchRevolutionary $Bonaparte's-coup-fr;
-$Bonaparte's-coup-fr .= new(year => 8, month => 2, day => 18);
-
-say $Bonaparte's-coup-fr.strftime("%Y-%m-%d");
-# ---> "0008-02-18" for 18 Brumaire VIII
-
-say $Bonaparte's-coup-fr.strftime("%A %e %B %EY");
-# ---> "octidi 18 Brumaire VIII"
-
-=end code
-
-Another example, with the C<Date> core module
+This example uses the C<Date> core module
 
 =begin code :lang<perl6>
 
@@ -166,14 +142,31 @@ say $last-day.strftime("%Y-%m-%d %G-W%V-%u");
 
 =end code
 
+Another example, with the French Revolutionary calendar
+
+=begin code :lang<perl6>
+
+use Date::Calendar::FrenchRevolutionary;
+#------> no "use Date::Calendar::Strftime;" is necessary!
+my Date::Calendar::FrenchRevolutionary $Bonaparte's-coup-fr;
+$Bonaparte's-coup-fr .= new(year => 8, month => 2, day => 18);
+
+say $Bonaparte's-coup-fr.strftime("%Y-%m-%d");
+# ---> "0008-02-18" for 18 Brumaire VIII
+
+say $Bonaparte's-coup-fr.strftime("%A %e %B %EY");
+# ---> "octidi 18 Brumaire VIII"
+
+=end code
+
 =head1 DESCRIPTION
 
 Date::Calendar::Strftime is  a role providing a  C<strftime> method to
 format a string  representing the date. This method is  similar to the
 C<strftime> function in C.
 
-This role applies to any  C<Date::Calendar::>R<xxx> module, as well as
-the C<Date> core module.
+This role applies  to any C<Date::Calendar::>R<xxx> class,  as well as
+the C<Date> core class.
 
 =head1 METHOD
 
@@ -215,7 +208,7 @@ is done with zeroes. Else, it is done wih spaces.
 result substring.
 
 =item  An optional  C<"E">  or  C<"O"> modifier.  On  some older  UNIX
-system,  these  were used  to  give  the I<extended>  or  I<localized>
+systems,  these were  used  to give  the  I<extended> or  I<localized>
 version  of  the date  attribute.  Here,  they rather  give  alternate
 variants of the date attribute.
 
@@ -316,8 +309,8 @@ A tab character.
 =defn C<%u>
 
 If the calendar has  a notion of week, this formatter  give the day of
-week as a 1..7 number (or some  other range if the week-concept is not
-exactly a 7-day week).
+week as a 1..7 number (or some other range if the week-like concept is
+not exactly a 7-day span).
 
 If the calendar has no week-like notion, this formatter returns itself
 C<"%u"> (or possibly with its  would-be length and padding codes, like

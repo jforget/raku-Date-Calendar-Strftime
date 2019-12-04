@@ -1,13 +1,24 @@
 NOM
 ===
 
-Date::Calendar::Strftime - formatter des dates Date::Calendar::quelque-chose avec 'strftime'
+Date::Calendar::Strftime - formatter des objets de la classe Date ou d'une classe Date::Calendar::quelque-chose avec 'strftime'
 
 RÉSUMÉ
 ======
 
+Avec la classe standard Date :
+
 ```perl6
 use Date::Calendar::Strftime;
+my Date $Saint-Sylvestre .= new(2019, 12, 31);
+$Saint-Sylvestre does Date::Calendar::Strftime;
+say $Saint-Sylvestre.strftime("%Y-%m-%d (date 'ISO' %G-W%V-%u)");
+# --> 2019-12-31 (date 'ISO' 2020-W01-2)
+```
+
+Avec une classe Date::Calendar::xxx (ici le calendrier républicain) :
+
+```perl6
 use Date::Calendar::FrenchRevolutionary;
 my Date::Calendar::FrenchRevolutionary $coup-d'État-fr;
 $coup-d'État-fr .= new(year => 8, month => 2, day => 18);
@@ -41,13 +52,14 @@ Date::Calendar::Strftime est un rôle  qui fournit une méthode strftime
 pour construire une chaîne de  caractères représentant une date. Cette
 méthode est semblable à la fonction strftime en C.
 
-Le   résumé  ci-dessus   montre   un  exemple   utilisant  la   classe
-Date::Calendar::FrenchRevolutionary    représentant   le    calendrier
-républicain, mais il  est possible d'utiliser Date::Calendar::Strftime
-avec  n'importe  quelle   classe  Date::Calendar::xxxx  possédant  des
-attributs "year" (année), "month" (mois)  et "day" (jour). Avec un peu
-d'effort,  il  est  possible  d'utiliser  le  rôle  avec  des  classes
-Date::Calendar::xxxx moins conventionnelles.
+Le résumé  ci-dessus montre  un exemple  utilisant la  classe standard
+Date et  un autre  avec la  classe Date::Calendar::FrenchRevolutionary
+représentant  le   calendrier  républicain,   mais  il   est  possible
+d'utiliser  Date::Calendar::Strftime  avec   n'importe  quelle  classe
+Date::Calendar::xxxx possédant  des attributs "year"  (année), "month"
+(mois)  et  "day"  (jour).  Avec  un peu  d'effort,  il  est  possible
+d'utiliser  le  rôle  avec   des  classes  Date::Calendar::xxxx  moins
+conventionnelles.
 
 AUTEUR
 ======

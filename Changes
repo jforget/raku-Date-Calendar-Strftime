@@ -1,7 +1,8 @@
 Revision history for Date-Calendar-Strftime
 
 0.0.2, released on...
-    - xxx
+    - week-related values (so-called "ISO date")
+    - usage with the core class Date
 
 0.0.1, released on Friday 8th Novembre 2019
     - Initial version
