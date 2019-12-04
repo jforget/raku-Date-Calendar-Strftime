@@ -5,15 +5,15 @@
   ],
   "build-depends" : [ ],
   "depends" : [ ],
-  "description" : "formatting any Date::Calendar::whatever date with 'strftime'",
-  "license" : "Artistic-2.0",
-  "name" : "Date::Calendar::Strftime",
-  "perl" : "6.c",
+  "description" : "formatting any Date object or Date::Calendar::whatever object with 'strftime'",
+  "license"     : "Artistic-2.0",
+  "name" 	: "Date::Calendar::Strftime",
+  "perl" 	: "6.c",
   "provides" : {
       "Date::Calendar::Strftime" : "lib/Date/Calendar/Strftime.pm6"
   },
   "resources" : [ ],
-  "source-url" : "xxx",
+  "source-url" : "https://github.com/jforget/raku-Date-Calendar-Strftime",
   "tags" : [
       "date"
     , "calendar"
