@@ -12,8 +12,8 @@
   "provides" : {
       "Date::Calendar::Strftime" : "lib/Date/Calendar/Strftime.pm6"
   },
-  "resources" : [ ],
-  "source-url" : "https://github.com/jforget/raku-Date-Calendar-Strftime",
+  "resources"   : [ ],
+  "source-url"  : "https://github.com/jforget/raku-Date-Calendar-Strftime.git",
   "tags" : [
       "date"
     , "calendar"
