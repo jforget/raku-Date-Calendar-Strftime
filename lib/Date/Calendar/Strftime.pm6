@@ -168,6 +168,36 @@ C<strftime> function in C.
 This role applies  to any C<Date::Calendar::>R<xxx> class,  as well as
 the C<Date> core class.
 
+=head2 Usage with the core class
+
+Some code is  required to use this module wih  the core C<Date> class.
+There  are two  variants. The  first  variant, shown  in the  synopsis
+above,  assigns the  C<Date::Calendar::Srftime> role  to each  C<Date>
+instance  separately. The  second  variant, shown  below, declares  an
+empty   class  which   merges  the   core  C<Date>   class  with   the
+C<Date::Calendar::Srftime> role.
+
+=begin code :lang<perl6>
+
+use Date::Calendar::Strftime;
+class My::Date is Date
+             does Date::Calendar::Strftime {}
+my My::Date $last-day .= new(2019, 12, 31);
+say $last-day.strftime("%Y-%m-%d %G-W%V-%u");
+# --> 2019-12-31 2020-W01-2
+
+=end code
+
+=head2 Usage with a C<Date::Calendar::>R<xxx> class
+
+C<Date::Calendar::Strftime>  is  automatically and  implicitly  loaded
+when using a C<Date::Calendar::>R<xxx> class.  There is no need to add
+a C<use> statement.
+
+Exceptions:  early versions  of C<Date::Calendar::FrenchRevolutionary>
+and  C<Date::Calendar::Hebrew>  do not  include  the  loading of  this
+module and are only partially compatible with it.
+
 =head1 METHOD
 
 There is only one method in the C<Date::Calendar::Strftime> role.
