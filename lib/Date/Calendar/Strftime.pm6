@@ -75,24 +75,31 @@ sub reformat(Str $string, $fmt) {
 }
 
 method strftime(Str $format) {
-  my %formatter = %(  a => -> { if $.can('day-abbr')   { $.day-abbr }   else { Nil } },
-                      A => -> { if $.can('day-name')   { $.day-name }   else { Nil } },
-                      b => -> { if $.can('month-abbr') { $.month-abbr } else { Nil } },
-                      B => -> { if $.can('month-name') { $.month-name } else { Nil } },
+  my %formatter = %(  
+		      # not a method
+                      n => -> { "\n" },
+                      t => -> { "\t" },
+		      # raw or processed mandatory method
                       d => -> { sprintf("%02d", $.day) },
                       e => -> { sprintf("%2d",  $.day) },
                       f => -> { sprintf("%2d",  $.month) },
-                      F => -> { $.strftime("%Y-%m-%d") },
-                      G => -> { if $.can('week-year') { sprintf("%04d", $.week-year) }
-                                else                  { sprintf("%04d", $.year     ) } },
                       j => -> { sprintf("%03d", $.day-of-year) },
                       L => -> { sprintf("%04d", $.year) },
                       m => -> { sprintf("%02d", $.month) },
-                      n => -> { "\n" },
-                      t => -> { "\t" },
+                      Y => -> { sprintf("%04d", $.year) },
+		      # recursion on mandatory methods
+                      F => -> { $.strftime("%Y-%m-%d") },
+		      # raw optional method falling back to nil
+                      a => -> { if $.can('day-abbr')   { $.day-abbr }   else { Nil } },
+                      A => -> { if $.can('day-name')   { $.day-name }   else { Nil } },
+                      b => -> { if $.can('month-abbr') { $.month-abbr } else { Nil } },
+                      B => -> { if $.can('month-name') { $.month-name } else { Nil } },
+		      # processed optional method falling back to nil
                       u => -> { if $.can('day-of-week') { sprintf("%d",   $.day-of-week) } else { Nil } },
                       V => -> { if $.can('week-number') { sprintf("%02d", $.week-number) } else { Nil } },
-                      Y => -> { sprintf("%04d", $.year) },
+		      # processed optional method falling back to a mandatory method
+                      G => -> { if $.can('week-year') { sprintf("%04d", $.week-year) }
+                                else                  { sprintf("%04d", $.year     ) } },
                    );
   %formatter<%> = -> { '%' };
   my @res = gather prt-format.parse($format, actions => re-format.new);
