@@ -74,7 +74,7 @@ sub reformat(Str $string, $fmt) {
   }
 }
 
-method strftime(Str $format) {
+method strftime($self: Str $format) {
   my %formatter = %(  
 		      # not a method
                       n => -> { "\n" },
@@ -90,16 +90,15 @@ method strftime(Str $format) {
 		      # recursion on mandatory methods
                       F => -> { $.strftime("%Y-%m-%d") },
 		      # raw optional method falling back to nil
-                      a => -> { if $.can('day-abbr')   { $.day-abbr }   else { Nil } },
-                      A => -> { if $.can('day-name')   { $.day-name }   else { Nil } },
-                      b => -> { if $.can('month-abbr') { $.month-abbr } else { Nil } },
-                      B => -> { if $.can('month-name') { $.month-name } else { Nil } },
+                      a => -> { $self.?day-abbr   },
+                      A => -> { $self.?day-name   },
+                      b => -> { $self.?month-abbr },
+                      B => -> { $self.?month-name },
 		      # processed optional method falling back to nil
                       u => -> { if $.can('day-of-week') { sprintf("%d",   $.day-of-week) } else { Nil } },
                       V => -> { if $.can('week-number') { sprintf("%02d", $.week-number) } else { Nil } },
 		      # processed optional method falling back to a mandatory method
-                      G => -> { if $.can('week-year') { sprintf("%04d", $.week-year) }
-                                else                  { sprintf("%04d", $.year     ) } },
+		      G => { sprintf("%04d", ($self.?week-year // $self.year)) },
                    );
   %formatter<%> = -> { '%' };
   my @res = gather prt-format.parse($format, actions => re-format.new);
