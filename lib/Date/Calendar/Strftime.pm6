@@ -506,6 +506,90 @@ dash looks silly  when zero-padded. You cannot have your  cake and eat
 it too. Anyhow,  you should not zero-pad strings,  only numbers should
 be zero-padded.
 
+=head3 Why three specifiers for the year?
+
+The main  year specifier is  the C<%Y> specifier.  What is the  use of
+C<%G> and C<%L>? First, let us examine C<%G>.
+
+=head4 ISO Date and C<%G> Specifier
+
+While C<%Y> is the year of the day, C<%G> is the "year of the week of
+the day". Here is the explanation of this convoluted formula.
+
+Between  the day  and  the  year, most  calendars  have two  different
+intermediary time  units, the week  and the month.  In  all calendars,
+the year is synchronised  with the month: a change from  a year to the
+next always  occurs simultaneously with a  change from a month  to the
+next.  On the other hand, the  year is not synchronised with the week:
+a change from the year to the next may happen at the middle of a week.
+
+Because the year and the month  are synchronised, the usual scheme for
+designating  a date  is  the  year-month-day scheme.  Yet,  it may  be
+convenient  to use  a  week-based scheme  sometimes.  So the  ISO-8601
+standard defines the following scheme:
+
+=item 1 Weeks span from Monday to Sunday.
+
+=item 2 If a week is fully within a year, it is assigned to this year.
+
+=item 3 If a week is across a  year change, it is assigned to the year
+with which it shares at least 4 days.
+
+=item  4 Once  all  weeks have  been  assigned to  a  year, the  weeks
+belonging to a given year are numbered 1 to 52 (or 53).
+
+The year  obtained with these  steps is the "year  of the week  of the
+day".  From these steps, you can infer a few facts.
+
+From 4th  January to 28th  December, the year of  the week of  the day
+always coincides with the year of the  day. On the first three days of
+the  year, 1st  Jan to  3rd  Jan, the  years  may differ  or they  may
+coincide. Same thing for the last three days, 29th Dec to 31st Dec.
+
+No matter how the year and the  week are unsynchronised, week 1 is the
+week containing 4th Jan, week 2  is the week containing 11th Jan, week
+3 is the week containing 18th Jan and so on.
+
+No  matter how  the  year  and the  week  are  unsynchronised, on  any
+Thursday, the year of the week of  the day is always equal to the year
+of the day. Also, week 1 is  the week containing the first Thursday of
+the year,  week 2 is  the week containing  the second Thursday  of the
+year, and so on.
+
+Other calendars  use unsynchronised  weeks, like the  Hebrew calendar,
+the Coptic calendar  and the Ethiopic calendar. A  difference with the
+Gregorian calendar is that in  threse three calendars weeks are Sunday
+→ Saturday  spans. So  we can  define rules  similar to  the Gregorian
+calendar's ISO date rules, but there,  Wednesday / Yom Revil / Peftoou
+/ Hamus play a central role  (pun intended) instead of Thursday. Also,
+for the Hebrew calendar, the number range for week numbers will not be
+1..52 or 1..53, but 1..50, 1..51, 1..55 or 1..56 depending on the type
+of the year.
+
+An more remote case: the French Revolutionary calendar use I<décades>,
+not weeks.  I<Décades> are 10-day  long and are synchronised  with the
+year, and even with the 30-day  months. The last I<décade> of the year
+is shortened  to 5  or 6  days, to keep  the synchronisation  with the
+year. So, what is told above  about the relations between the week and
+the year may  not apply to this calendar. In  this calendar, the C<%G>
+specifier gives always the same result as the C<%Y> specifier.
+
+=head4 The C<%L> Specifier
+
+Why a  C<%L> specifier  in C<Date::Calendar::Strftime>?  Because there
+was    already    a   C<%L>    specifier    in    the   Perl    module
+C<DateTime::Calendar::FrenchRevutionary>  (which I  wrote). And  why a
+C<%L>  specifier in  C<DT::C::FR>?  Because there  is  already one  in
+Perl's C<Date::Convert::French_Rev>  (which I  wrote, too). And  why a
+C<%L> specifier in C<D::C::F_R>? Well...
+
+So  why did  I  include a  C<%L>  specifier in  the  first release  of
+C<Date::Convert::French_Rev> in  early 2001? I cannot  remember. Maybe
+there was  another week-based scheme,  that fell into disuse  and then
+into oblivion. Maybe it would be best to start a deprecation procedure
+for this specifier. Anyhow,  you are advised not to use  it and to use
+either C<%Y> or C<%G> depending on the context.
+
 =head1 AUTHOR
 
 Jean Forget <JFORGET at cpan dot org>
