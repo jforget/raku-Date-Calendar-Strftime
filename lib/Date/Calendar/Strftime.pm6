@@ -76,10 +76,10 @@ sub reformat(Str $string, $fmt) {
 
 method strftime($self: Str $format) {
   my %formatter = %(  
-		      # not a method
+                      # not a method
                       n => -> { "\n" },
                       t => -> { "\t" },
-		      # raw or processed mandatory method
+                      # raw or processed mandatory method
                       d => -> { sprintf("%02d", $.day) },
                       e => -> { sprintf("%2d",  $.day) },
                       f => -> { sprintf("%2d",  $.month) },
@@ -87,18 +87,18 @@ method strftime($self: Str $format) {
                       L => -> { sprintf("%04d", $.year) },
                       m => -> { sprintf("%02d", $.month) },
                       Y => -> { sprintf("%04d", $.year) },
-		      # recursion on mandatory methods
+                      # recursion on mandatory methods
                       F => -> { $.strftime("%Y-%m-%d") },
-		      # raw optional method falling back to nil
+                      # raw optional method falling back to nil
                       a => -> { $self.?day-abbr   },
                       A => -> { $self.?day-name   },
                       b => -> { $self.?month-abbr },
                       B => -> { $self.?month-name },
-		      # processed optional method falling back to nil
+                      # processed optional method falling back to nil
                       u => -> { if $.can('day-of-week') { sprintf("%d",   $.day-of-week) } else { Nil } },
                       V => -> { if $.can('week-number') { sprintf("%02d", $.week-number) } else { Nil } },
-		      # processed optional method falling back to a mandatory method
-		      G => { sprintf("%04d", ($self.?week-year // $self.year)) },
+                      # processed optional method falling back to a mandatory method
+                      G => { sprintf("%04d", ($self.?week-year // $self.year)) },
                    );
   %formatter<%> = -> { '%' };
   my @res = gather prt-format.parse($format, actions => re-format.new);

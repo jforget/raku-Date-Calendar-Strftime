@@ -1,7 +1,9 @@
 Revision history for Date-Calendar-Strftime
 
 0.0.3, released on...
-    - ...
+    - fix the wrong URL in META6.json
+    - more documentation
+    - small code changes
 
 0.0.2, released on Wednesday 4th December 2019
     - week-related values (so-called "ISO date")
