@@ -1,5 +1,5 @@
 use v6.c;
-unit role Date::Calendar::Strftime:ver<0.0.3>:auth<cpan:JFORGET>;
+unit role Date::Calendar::Strftime:ver<0.0.4>:auth<cpan:JFORGET>;
 
 my grammar prt-format {
   token percent    { '%' }
