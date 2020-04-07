@@ -194,6 +194,9 @@ say $last-day.strftime("%Y-%m-%d %G-W%V-%u");
 
 =end code
 
+Or  you  can use  the  C<Date::Calendar::Gregorian>  class instead  of
+C<Date>. See below.
+
 =head2 Usage with a C<Date::Calendar::>R<xxx> class
 
 C<Date::Calendar::Strftime>  is  automatically and  implicitly  loaded
@@ -479,7 +482,7 @@ a  year. In  the 1950's  and  the 1960's,  when RAM  and storage  were
 expensive, programmers had  a good reason to truncate  numbers and let
 the users guess the missing parts.  But nowadays, kilobytes of RAM and
 storage are several orders of magnitude  cheaper so there is no longer
-any  reason  to  truncate  numbers. Twenty  years  ago,  the  worlwide
+any  reason  to truncate  numbers.  Twenty  years ago,  the  worldwide
 endeavour to  fix the Y2K bug  was a really necessary  endeavour and a
 mostly  successful  one, even  if  some  glitches happened  (and  were
 hushed). This does  not mean that twenty years later  you can fallback
@@ -560,25 +563,25 @@ Other calendars  use unsynchronised  weeks, like the  Hebrew calendar,
 the Coptic calendar  and the Ethiopic calendar. A  difference with the
 Gregorian calendar is that in  threse three calendars weeks are Sunday
 → Saturday  spans. So  we can  define rules  similar to  the Gregorian
-calendar's ISO date rules, but there,  Wednesday / Yom Revil / Peftoou
+calendar's ISO date rules, but there, Wednesday / Yom Reviʻi / Peftoou
 / Hamus play a central role  (pun intended) instead of Thursday. Also,
 for the Hebrew calendar, the number range for week numbers will not be
 1..52 or 1..53, but 1..50, 1..51, 1..55 or 1..56 depending on the type
 of the year.
 
-An more remote case: the French Revolutionary calendar use I<décades>,
+A more remote case: the  French Revolutionary calendar use I<décades>,
 not weeks.  I<Décades> are 10-day  long and are synchronised  with the
 year, and even with the 30-day  months. The last I<décade> of the year
 is shortened  to 5  or 6  days, to keep  the synchronisation  with the
 year. So, what is told above  about the relations between the week and
 the year may  not apply to this calendar. In  this calendar, the C<%G>
-specifier gives always the same result as the C<%Y> specifier.
+specifier always gives the same result as the C<%Y> specifier.
 
 =head4 The C<%L> Specifier
 
 Why a  C<%L> specifier  in C<Date::Calendar::Strftime>?  Because there
 was    already    a   C<%L>    specifier    in    the   Perl    module
-C<DateTime::Calendar::FrenchRevutionary>  (which I  wrote). And  why a
+C<DateTime::Calendar::FrenchRevolutionary> (which I  wrote). And why a
 C<%L>  specifier in  C<DT::C::FR>?  Because there  is  already one  in
 Perl's C<Date::Convert::French_Rev>  (which I  wrote, too). And  why a
 C<%L> specifier in C<D::C::F_R>? Well...
@@ -586,8 +589,8 @@ C<%L> specifier in C<D::C::F_R>? Well...
 So  why did  I  include a  C<%L>  specifier in  the  first release  of
 C<Date::Convert::French_Rev> in  early 2001? I cannot  remember. Maybe
 there was  another week-based scheme,  that fell into disuse  and then
-into oblivion. Maybe it would be best to start a deprecation procedure
-for this specifier. Anyhow,  you are advised not to use  it and to use
+into oblivion. It  would be best to start a  deprecation procedure for
+this  specifier. Anyhow,  you are  advised not  to use  it and  to use
 either C<%Y> or C<%G> depending on the context.
 
 =head1 AUTHOR
