@@ -62,7 +62,7 @@ Date::Calendar::xxxx classes.
 AUTHOR
 ======
 
-Jean Forget <JFORGET@cpan.org>
+Jean Forget <J2N-FORGET at orange dot fr>
 
 COPYRIGHT AND LICENSE
 =====================

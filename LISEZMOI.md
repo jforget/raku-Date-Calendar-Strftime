@@ -64,7 +64,7 @@ conventionnelles.
 AUTEUR
 ======
 
-Jean Forget <JFORGET@cpan.org>
+Jean Forget <J2N-FORGET at orange dot fr>
 
 COPYRIGHT ET LICENCE
 ====================
