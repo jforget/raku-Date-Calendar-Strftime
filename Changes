@@ -1,7 +1,10 @@
 Revision history for Date-Calendar-Strftime
 
 0.0.4 released on ...
-    -
+    - add an "api" property to the classes
+    - migration from CPAN6 to zef
+    - fewer t/*.t tests and adding xt/*.t tests
+    - deprecating the '%L' specifier
 
 0.0.3, released on Wednesday 22nd January 2020
     - fix the wrong URL in META6.json

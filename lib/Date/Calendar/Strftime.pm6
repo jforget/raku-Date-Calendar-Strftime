@@ -84,7 +84,7 @@ method strftime($self: Str $format) {
                       e => -> { sprintf("%2d",  $.day) },
                       f => -> { sprintf("%2d",  $.month) },
                       j => -> { sprintf("%03d", $.day-of-year) },
-                      L => -> { sprintf("%04d", $.year) },
+                      L => -> { warn("'%L' strftime specifier is deprecated"); sprintf("%04d", $.year) },
                       m => -> { sprintf("%02d", $.month) },
                       Y => -> { sprintf("%04d", $.year) },
                       # recursion on mandatory methods
@@ -589,9 +589,10 @@ C<%L> specifier in C<D::C::F_R>? Well...
 So  why did  I  include a  C<%L>  specifier in  the  first release  of
 C<Date::Convert::French_Rev> in  early 2001? I cannot  remember. Maybe
 there was  another week-based scheme,  that fell into disuse  and then
-into oblivion. It  would be best to start a  deprecation procedure for
-this  specifier. Anyhow,  you are  advised not  to use  it and  to use
-either C<%Y> or C<%G> depending on the context.
+into oblivion.  Therefore this specifier is  deprecated, starting with
+the release  of version C<0.0.4> in  2024. It will be  removed in 2026
+(or a later release). You are advised  not to use it and to use either
+C<%Y> or C<%G> depending on the context.
 
 =head1 AUTHOR
 
