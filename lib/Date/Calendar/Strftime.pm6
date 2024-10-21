@@ -1,5 +1,5 @@
 use v6.c;
-unit role Date::Calendar::Strftime:ver<0.0.4>:auth<cpan:JFORGET>;
+unit role Date::Calendar::Strftime:ver<0.0.4>:auth<zef:jforget>:api<0>;
 
 my grammar prt-format {
   token percent    { '%' }
@@ -75,7 +75,7 @@ sub reformat(Str $string, $fmt) {
 }
 
 method strftime($self: Str $format) {
-  my %formatter = %(  
+  my %formatter = %(
                       # not a method
                       n => -> { "\n" },
                       t => -> { "\t" },
@@ -608,7 +608,7 @@ module.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright © 2019, 2020 Jean Forget, all rights reserved
+Copyright © 2019, 2020, 2024 Jean Forget, all rights reserved
 
 This library is  free software; you can redistribute  it and/or modify
 it under the Artistic License 2.0.

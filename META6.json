@@ -1,5 +1,6 @@
 {
-  "auth" : "cpan:JFORGET",
+  "api" : "0",
+  "auth" : "zef:jforget",
   "authors" : [
     "Jean Forget"
   ],
@@ -18,7 +19,7 @@
       "date"
     , "calendar"
   ],
-  "test-depends" : [ 
+  "test-depends" : [
       "Test::META"
   ],
   "version" : "0.0.4"
