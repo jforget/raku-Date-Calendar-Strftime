@@ -1,6 +1,6 @@
 Revision history for Date-Calendar-Strftime
 
-0.0.4 released on ...
+0.0.4 released on Thursday 24th October 2024
     - add an "api" property to the classes
     - migration from CPAN6 to zef
     - fewer t/*.t tests and adding xt/*.t tests
