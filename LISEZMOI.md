@@ -69,7 +69,7 @@ Jean Forget <J2N-FORGET at orange dot fr>
 COPYRIGHT ET LICENCE
 ====================
 
-Copyright © 2019, 2020, 2024 Jean Forget, tous droits réservés.
+Copyright (c) 2019, 2020, 2024 Jean Forget, tous droits réservés.
 
 Ce code constitue du logiciel libre. Vous pouvez le redistribuer et le
 modifier  en accord  avec  la  « licence  artistique  2.0 »  (Artistic

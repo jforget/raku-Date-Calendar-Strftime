@@ -1,6 +1,18 @@
 use v6.d;
 unit role Date::Calendar::Strftime:ver<0.1.0>:auth<zef:jforget>:api<1>;
 
+sub before-sunrise is export {
+  return 0;
+}
+
+sub daylight is export {
+  return 1;
+}
+
+sub after-sunset is export {
+  return 2;
+}
+
 my grammar prt-format {
   token percent    { '%' }
   token except-pct { <-[%]> }
@@ -95,10 +107,11 @@ method strftime($self: Str $format) {
                       b => -> { $self.?month-abbr },
                       B => -> { $self.?month-name },
                       # processed optional method falling back to nil
-                      u => -> { if $.can('day-of-week') { sprintf("%d",   $.day-of-week) } else { Nil } },
-                      V => -> { if $.can('week-number') { sprintf("%02d", $.week-number) } else { Nil } },
+                      u  => -> { if $.can('day-of-week') { sprintf("%d",   $.day-of-week) } else { Nil } },
+                      V  => -> { if $.can('week-number') { sprintf("%02d", $.week-number) } else { Nil } },
+                      Ep => -> { if $.can('daypart'    ) { substr("☾☼☽"  , $.daypart,  1) } else { Nil } },
                       # processed optional method falling back to a mandatory method
-                      G => { sprintf("%04d", ($self.?week-year // $self.year)) },
+                      G  => -> { sprintf("%04d", ($self.?week-year // $self.year)) },
                    );
   %formatter<%> = -> { '%' };
   my @res = gather prt-format.parse($format, actions => re-format.new);
@@ -171,8 +184,8 @@ Date::Calendar::Strftime is  a role providing a  C<strftime> method to
 format a string  representing the date. This method is  similar to the
 C<strftime> function in C.
 
-This role applies  to any C<Date::Calendar::>R<xxx> class,  as well as
-the C<Date> core class.
+This role automatically applies to any C<Date::Calendar::>R<xxx> class
+and can be manually applied to instances of the C<Date> core class.
 
 =head2 Usage with the core class
 
@@ -206,6 +219,23 @@ a C<use> statement.
 Exceptions:  early versions  of C<Date::Calendar::FrenchRevolutionary>
 and  C<Date::Calendar::Hebrew>  do not  include  the  loading of  this
 module and are only partially compatible with it.
+
+=head1 EXPORTED SUBROUTINES
+
+The module C<Date::Calendar::Strftime> exports three routines:
+
+=item C<before-sunrise>
+=item C<daylight>
+=item C<after-sunset>
+
+These subroutines  have not  input parameters and  each one  returns a
+constant value. They are used in the C<Date::Calendar::>R<xxx> modules
+when creating  a date object, so  all modules will use  the same three
+values for the same meaning.
+
+These three  subroutines are similar  to an C<enum>  type declaration,
+with   a   different   scope   (they    must   be   visible   in   the
+C<Date::Calendar::>R<xxx> modules and in the calling programs).
 
 =head1 METHOD
 
@@ -341,6 +371,23 @@ including a leading zero if necessary.
 
 A newline character.
 
+=defn C<%Ep>
+
+Gives a 1-char string representing the day part:
+
+=item C<☾> or C<U+263E> before sunrise,
+=item C<☼> or C<U+263C> during daylight,
+=item C<☽> or C<U+263D> after sunset.
+
+Rationale: in  C or in  other programming languages,  when C<strftime>
+deals with a date-time object, the day is split into two parts, before
+noon and  after noon. The  C<%p> specifier  reflects this by  giving a
+C<"AM"> or C<"PM"> string.
+
+The  3-part   splitting  in   the  C<Date::Calendar::>R<xxx>   may  be
+considered as  an alternate  splitting of  a day.  To reflect  this in
+C<strftime>, we use an alternate version of C<%p>, therefore C<%Ep>.
+
 =defn C<%t>
 
 A tab character.
@@ -398,6 +445,7 @@ following methods if possible:
 =item day-of-week
 =item week-number
 =item week-year
+=item daypart
 
 =head2 Specific C<strftime> codes
 
@@ -609,7 +657,7 @@ module.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright © 2019, 2020, 2024 Jean Forget, all rights reserved
+Copyright (c) 2019, 2020, 2024 Jean Forget, all rights reserved
 
 This library is  free software; you can redistribute  it and/or modify
 it under the Artistic License 2.0.

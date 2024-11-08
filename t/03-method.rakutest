@@ -1,4 +1,4 @@
-use v6.c;
+use v6.d;
 use Test;
 use Date::Calendar::Strftime;
 
@@ -12,6 +12,7 @@ class Date::Calendar::Check
   method day-name    { "monday" }
   method day-abbr    { "mon" }
   method day-of-year { 1 }
+  method daypart     { after-sunset }
 }
 
 my @tests = (   ("%3z whatever %-4z"   , "%3z whatever %-4z"       )
@@ -19,7 +20,7 @@ my @tests = (   ("%3z whatever %-4z"   , "%3z whatever %-4z"       )
               , ("%% whatever %B"      , "% whatever january"      )
               , ("%%%A whatever %B"    , "%monday whatever january")
               , ("%a %b %d %e %f %j %m", "mon jan 01  1  1 001 01")
-              , ("%F %G %L %Y %V %u"   , "2001-01-01 2001 2001 2001 %V %u")
+              , ("%F %G %L %Y %V %u %Ep"      , "2001-01-01 2001 2001 2001 %V %u ☽")
               , ("|%2a| |%-2a| |%02a| |%-02a|", "|mon| |mon| |mon| |mon|")
               , ("|%3a| |%-3a| |%03a| |%-03a|", "|mon| |mon| |mon| |mon|")
               , ("|%4a| |%-4a| |%04a| |%-04a|", "| mon| |mon | |0mon| |mon |")
