@@ -1,5 +1,5 @@
 {
-  "api" : "0",
+  "api" : "1",
   "auth" : "zef:jforget",
   "authors" : [
     "Jean Forget"
@@ -9,9 +9,9 @@
   "description" : "formatting any Date object or Date::Calendar::whatever object with 'strftime'",
   "license"     : "Artistic-2.0",
   "name"        : "Date::Calendar::Strftime",
-  "perl"        : "6.c",
+  "perl"        : "6.d",
   "provides" : {
-      "Date::Calendar::Strftime" : "lib/Date/Calendar/Strftime.pm6"
+      "Date::Calendar::Strftime" : "lib/Date/Calendar/Strftime.rakumod"
   },
   "resources"   : [ ],
   "source-url"  : "https://github.com/jforget/raku-Date-Calendar-Strftime.git",
@@ -22,5 +22,5 @@
   "test-depends" : [
       "Test::META"
   ],
-  "version" : "0.0.4"
+  "version" : "0.1.0"
 }

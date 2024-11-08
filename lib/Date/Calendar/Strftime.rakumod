@@ -1,5 +1,5 @@
-use v6.c;
-unit role Date::Calendar::Strftime:ver<0.0.4>:auth<zef:jforget>:api<0>;
+use v6.d;
+unit role Date::Calendar::Strftime:ver<0.1.0>:auth<zef:jforget>:api<1>;
 
 my grammar prt-format {
   token percent    { '%' }

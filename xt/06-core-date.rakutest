@@ -1,10 +1,6 @@
-use v6.c;
+use v6.d;
 use Test;
 use Date::Calendar::Strftime;
-
-# empty class combining the core class with the role
-class My::Date is Date
-             does Date::Calendar::Strftime {}
 
 my @tests = (   ("%3z whatever %-4z"   , "%3z whatever %-4z"       )
               , ("%A whatever %B"      , "%A whatever %B" )
@@ -19,7 +15,8 @@ my @tests = (   ("%3z whatever %-4z"   , "%3z whatever %-4z"       )
               , ("|%5u| |%-5u| |%05u| |%-05u|", "|    1| |1    | |00001| |1    |")
             );
 plan @tests.elems;
-my My::Date $d .= new(2001, 1, 1);
+my Date $d .= new(2001, 1, 1);
+$d does Date::Calendar::Strftime;
 for @tests -> $elem {
   my ($fmt, $expected) = @$elem;
   is($d.strftime($fmt), $expected);
