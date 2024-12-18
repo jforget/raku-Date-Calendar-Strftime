@@ -151,7 +151,7 @@ Date::Calendar::Strftime - formatting any Date object or Date::Calendar::whateve
 
 This example uses the C<Date> core module
 
-=begin code :lang<perl6>
+=begin code :lang<raku>
 
 use Date::Calendar::Strftime;
 my Date $last-day .= new(2019, 12, 31);
@@ -163,7 +163,7 @@ say $last-day.strftime("%Y-%m-%d %G-W%V-%u");
 
 Another example, with the French Revolutionary calendar
 
-=begin code :lang<perl6>
+=begin code :lang<raku>
 
 use Date::Calendar::FrenchRevolutionary;
 #------> no "use Date::Calendar::Strftime;" is necessary!
@@ -196,7 +196,7 @@ instance  separately. The  second  variant, shown  below, declares  an
 empty   class  which   merges  the   core  C<Date>   class  with   the
 C<Date::Calendar::Srftime> role.
 
-=begin code :lang<perl6>
+=begin code :lang<raku>
 
 use Date::Calendar::Strftime;
 class My::Date is Date
@@ -247,7 +247,7 @@ This method is  very similar to the homonymous functions  you can find
 in several  languages (C, shell, etc).  It also takes some  ideas from
 C<printf>-similar functions. For example
 
-=begin code :lang<perl6>
+=begin code :lang<raku>
 
 $df.strftime("%04d blah blah blah %-25B")
 
@@ -296,54 +296,54 @@ The C<Date::Calendar::Strftime> module implements  a few standard type
 codes as  listed below.  Many others  are possible,  but they  must be
 provided by the calling C<Date::Calendar::>R<xxx> module.
 
-=defn C<%a>
+=defn %a
 
 The abbreviated name of the day of week.
 
 If not  defined (as with  the C<Date>  core module), the  formatter is
 returned as is.
 
-=defn C<%A>
+=defn %A
 
 The full name of the day of week.
 
 If not  defined (as with  the C<Date>  core module), the  formatter is
 returned as is.
 
-=defn C<%b>
+=defn %b
 
 The abbreviated month name.
 
 If not  defined (as with  the C<Date>  core module), the  formatter is
 returned as is.
 
-=defn C<%B>
+=defn %B
 
 The full month name.
 
 If not  defined (as with  the C<Date>  core module), the  formatter is
 returned as is.
 
-=defn C<%d>
+=defn %d
 
 The day of the month as a decimal number (usually range 01 to 31).
 
-=defn C<%e>
+=defn %e
 
 Like C<%d>, the  day of the month  as a decimal number,  but a leading
 zero is replaced by a space.
 
-=defn C<%f>
+=defn %f
 
 The  month as  a decimal  number (usually  1 to  12). Unlike  C<%m>, a
 leading zero is replaced by a space. This is still a 2-char string.
 
-=defn C<%F>
+=defn %F
 
 Equivalent to  C<%Y-%m-%d> (similar  to the ISO  8601 date  format for
 Gregorian dates)
 
-=defn C<%G>
+=defn %G
 
 The year  as a decimal number.  By default, strictly similar  to C<%L>
 and C<%Y>. If the calendar has a concept of week or similar and if the
@@ -352,26 +352,26 @@ number of  the "quasi-year" as  defined by ISO-8601 for  the so-called
 "ISO   date"   for   Gregorian  dates.   This   "quasi-year"   (method
 C<week-year>) is synchronised with the week.
 
-=defn C<%j>
+=defn %j
 
 The day of the year as a three-digit decimal number (usually range 001
 to 366).
 
-=defn C<%L>
+=defn %L
 
 The year  as a decimal number.  By default, strictly similar  to C<%G>
 and C<%Y>.
 
-=defn C<%m>
+=defn %m
 
 The month  as a  two-digit decimal  number (usually  range 01  to 12),
 including a leading zero if necessary.
 
-=defn C<%n>
+=defn %n
 
 A newline character.
 
-=defn C<%Ep>
+=defn %Ep
 
 Gives a 1-char string representing the day part:
 
@@ -388,11 +388,11 @@ The  3-part   splitting  in   the  C<Date::Calendar::>R<xxx>   may  be
 considered as  an alternate  splitting of  a day.  To reflect  this in
 C<strftime>, we use an alternate version of C<%p>, therefore C<%Ep>.
 
-=defn C<%t>
+=defn %t
 
 A tab character.
 
-=defn C<%u>
+=defn %u
 
 If the calendar has  a notion of week, this formatter  give the day of
 week as a 1..7 number (or some other range if the week-like concept is
@@ -402,7 +402,7 @@ If the calendar has no week-like notion, this formatter returns itself
 C<"%u"> (or possibly with its  would-be length and padding codes, like
 C<"%-3u">).
 
-=defn C<%V>
+=defn %V
 
 If the calendar has a notion  of week or similar, this formatter gives
 the week  number. If the week  and the year are  not synchronised, the
@@ -416,14 +416,14 @@ If the calendar has no week-like notion, this formatter returns itself
 C<"%V"> (or possibly with its  would-be length and padding codes, like
 C<"%05V">).
 
-=defn C<%Y>
+=defn %Y
 
 The year  as a decimal number.  By default, strictly similar  to C<%G>
 and C<%L>.
 
-=defn C<%%>
+=defn %%
 
-A literal `%' character.
+A literal C<%> character.
 
 =head3 C<Date::Calendar::>R<xxx> Requirements
 
@@ -457,7 +457,7 @@ format the date attributes.
 Example: a module defines a C<feast> method, which will be inserted in
 string with the C<%Oj> or the C<%*> specifiers. This module defines:
 
-=begin code :lang<perl6>
+=begin code :lang<raku>
 
   method specific-format { %( Oj => { $.feast },
                              '*' => { $.feast } ); }
@@ -471,7 +471,7 @@ C<Date::Calendar::>R<xxx>  module  deactivates   the  C<%a>  specifier
 C<abbreviated-month>  method  (C<%b>   specifier).  This  module  will
 define:
 
-=begin code :lang<perl6>
+=begin code :lang<raku>
 
   method specific-format { %( a  => Nil,
                               b  => { $.abbreviated-month } ); }
@@ -480,7 +480,7 @@ define:
 
 Of course, these features can be combined with
 
-=begin code :lang<perl6>
+=begin code :lang<raku>
 
   method specific-format { %( Oj => { $.feast },
                              '*' => { $.feast },

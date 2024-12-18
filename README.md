@@ -8,7 +8,7 @@ SYNOPSIS
 
 Using the core class Date:
 
-```perl6
+```
 use Date::Calendar::Strftime;
 my Date $last-day .= new(2019, 12, 31);
 $last-day does Date::Calendar::Strftime;
@@ -18,7 +18,7 @@ say $last-day.strftime("%Y-%m-%d ('ISO' date %G-W%V-%u)");
 
 Using a Date::Calendar::xxx class (here, the French Revolutionary one):
 
-```perl6
+```
 use Date::Calendar::FrenchRevolutionary;
 my Date::Calendar::FrenchRevolutionary $Bonaparte's-coup-fr;
 $Bonaparte's-coup-fr .= new(year => 8, month => 2, day => 18);

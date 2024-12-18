@@ -8,7 +8,7 @@ RÉSUMÉ
 
 Avec la classe standard Date :
 
-```perl6
+```
 use Date::Calendar::Strftime;
 my Date $Saint-Sylvestre .= new(2019, 12, 31);
 $Saint-Sylvestre does Date::Calendar::Strftime;
@@ -18,7 +18,7 @@ say $Saint-Sylvestre.strftime("%Y-%m-%d (date 'ISO' %G-W%V-%u)");
 
 Avec une classe Date::Calendar::xxx (ici le calendrier républicain) :
 
-```perl6
+```
 use Date::Calendar::FrenchRevolutionary;
 my Date::Calendar::FrenchRevolutionary $coup-d'État-fr;
 $coup-d'État-fr .= new(year => 8, month => 2, day => 18);
