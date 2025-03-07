@@ -1,5 +1,7 @@
 Revision history for Date-Calendar-Strftime
 
+0.1.1 released on...
+
 0.1.0 released on Thursday 19 December 2024
     - use file extensions '.rakumod' and '.rakutest' instead of '.pm6' and '.t'
     - api 1: support a "daypart" attribute

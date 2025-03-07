@@ -67,7 +67,7 @@ Jean Forget <J2N-FORGET at orange dot fr>
 COPYRIGHT AND LICENSE
 =====================
 
-Copyright (c) 2019, 2020, 2024 Jean Forget, all rights reserved
+Copyright (c) 2019, 2020, 2024, 2025 Jean Forget, all rights reserved
 
 This library is  free software; you can redistribute  it and/or modify
 it under the Artistic License 2.0.
