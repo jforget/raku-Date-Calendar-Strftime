@@ -16,7 +16,17 @@ say $last-day.strftime("%Y-%m-%d ('ISO' date %G-W%V-%u)");
 # --> 2019-12-31 ('ISO' date 2020-W01-2)
 ```
 
-Using a Date::Calendar::xxx class (here, the French Revolutionary one):
+A bit  simpler, using a class  that inherits from the  core class Date
+and links it with `strftime`
+
+```
+use Date::Calendar::Gregorian;
+my Date::Calendar::Gregorian $last-day .= new(2019, 12, 31);
+say $last-day.strftime("%Y-%m-%d ('ISO' date %G-W%V-%u)");
+# --> 2019-12-31 ('ISO' date 2020-W01-2)
+```
+
+Using another Date::Calendar::xxx class (here, the French Revolutionary one):
 
 ```
 use Date::Calendar::FrenchRevolutionary;
@@ -52,12 +62,12 @@ Date::Calendar::Strftime  is a  role  providing a  strftime method  to
 format a string  representing the date. This method is  similar to the
 strftime function in C.
 
-The synopsis  above shows  examples with the  standard class  Date and
-with     the     class    Date::Calendar::FrenchRevolutionary,     but
-Date::Calendar::Strftime  can be  used  with any  Date::Calendar::xxxx
-class which  implements the attributes  "year", "month" and  "day". It
-can  be   used  with   a  little  more   effort  with   more  esoteric
-Date::Calendar::xxxx classes.
+The synopsis above shows examples with the standard class Date and
+with specific classes Date::Calendar::Gregorian and
+Date::Calendar::FrenchRevolutionary, but Date::Calendar::Strftime can
+be used with any Date::Calendar::xxxx class which implements the
+attributes "year", "month" and "day". It can be used with a little
+more effort with more esoteric Date::Calendar::xxxx classes.
 
 AUTHOR
 ======

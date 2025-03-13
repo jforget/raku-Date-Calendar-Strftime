@@ -16,7 +16,17 @@ say $Saint-Sylvestre.strftime("%Y-%m-%d (date 'ISO' %G-W%V-%u)");
 # --> 2019-12-31 (date 'ISO' 2020-W01-2)
 ```
 
-Avec une classe Date::Calendar::xxx (ici le calendrier républicain) :
+Un peu  plus simple,  en utilisant  une classe  héritant de  la classe
+standard Date et la reliant à `strftime` :
+
+```
+use Date::Calendar::Gregorian;
+my Date::Calendar::Gregorian $Saint-Sylvestre .= new(2019, 12, 31);
+say $Saint-Sylvestre.strftime("%Y-%m-%d ('ISO' date %G-W%V-%u)");
+# --> 2019-12-31 ('ISO' date 2020-W01-2)
+```
+
+Avec une autre classe Date::Calendar::xxx (ici le calendrier républicain) :
 
 ```
 use Date::Calendar::FrenchRevolutionary;
@@ -53,13 +63,13 @@ pour construire une chaîne de  caractères représentant une date. Cette
 méthode est semblable à la fonction strftime en C.
 
 Le résumé  ci-dessus montre  un exemple  utilisant la  classe standard
-Date et  un autre  avec la  classe Date::Calendar::FrenchRevolutionary
-représentant  le   calendrier  républicain,   mais  il   est  possible
-d'utiliser  Date::Calendar::Strftime  avec   n'importe  quelle  classe
-Date::Calendar::xxxx possédant  des attributs "year"  (année), "month"
-(mois)  et  "day"  (jour).  Avec  un peu  d'effort,  il  est  possible
-d'utiliser  le  rôle  avec   des  classes  Date::Calendar::xxxx  moins
-conventionnelles.
+Date  et  un  autre  avec  les  classes  Date::Calendar::Gregorian  et
+Date::Calendar::FrenchRevolutionary   (représentant    le   calendrier
+républicain), mais il est possible d'utiliser Date::Calendar::Strftime
+avec  n'importe  quelle   classe  Date::Calendar::xxxx  possédant  des
+attributs "year" (année), "month" (mois)  et "day" (jour). Avec un peu
+d'effort,  il  est  possible  d'utiliser  le  rôle  avec  des  classes
+Date::Calendar::xxxx moins conventionnelles.
 
 AUTEUR
 ======

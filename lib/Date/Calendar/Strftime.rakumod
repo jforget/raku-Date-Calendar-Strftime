@@ -161,6 +161,18 @@ say $last-day.strftime("%Y-%m-%d %G-W%V-%u");
 
 =end code
 
+If the C<Date::Calendar::Gregorian> class is installed,
+the same example can be simplified:
+
+=begin code :lang<raku>
+
+use Date::Calendar::Gregorian;
+my  Date::Calendar::Gregorian $last-day .= new(2019, 12, 31);
+say $last-day.strftime("%Y-%m-%d %G-W%V-%u");
+# --> 2019-12-31 2020-W01-2
+
+=end code
+
 Another example, with the French Revolutionary calendar
 
 =begin code :lang<raku>
@@ -533,7 +545,7 @@ storage are several orders of magnitude  cheaper so there is no longer
 any  reason  to truncate  numbers.  Twenty  years ago,  the  worldwide
 endeavour to  fix the Y2K bug  was a really necessary  endeavour and a
 mostly  successful  one, even  if  some  glitches happened  (and  were
-hushed). This does  not mean that twenty years later  you can fallback
+hushed). This does not mean that twenty or more years later you can fallback
 into the old dirty habits of butchering year numbers.
 
 On the other  hand, using unambiguous abbreviations for  day names and
@@ -641,6 +653,17 @@ into oblivion.  Therefore this specifier is  deprecated, starting with
 the release  of version C<0.0.4> in  2024. It will be  removed in 2026
 (or a later release). You are advised  not to use it and to use either
 C<%Y> or C<%G> depending on the context.
+
+=head1 SEE ALSO
+
+=head2 Raku Software
+
+L<https://raku.land/zef:lizmat/DateTime::strftime>
+or L<https://github.com/lizmat/DateTime-strftime>.
+
+=head2 Perl Software
+
+L<DateTime|https://metacpan.org/pod/DateTime#%24dt-%3Estrftime(-%24format%2C-...-)>
 
 =head1 AUTHOR
 
