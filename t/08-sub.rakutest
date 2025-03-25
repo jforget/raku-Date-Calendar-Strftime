@@ -3,15 +3,15 @@ use Test;
 use Date::Calendar::Strftime;
 
 my @tests = (   ("%3z whatever %-4z"   , "%3z whatever %-4z"       )
-              , ("%A whatever %B"      , "thursday whatever february" )
-              , ("%% whatever %B"      , "% whatever february"      )
-              , ("%%%A whatever %B"    , "%thursday whatever february")
-              , ("%a %b %d %e %f %j %m", "thu feb 01  1  2 032 02")
+              , ("%A whatever %B"      , "Thursday whatever February" )
+              , ("%% whatever %B"      , "% whatever February"      )
+              , ("%%%A whatever %B"    , "%Thursday whatever February")
+              , ("%a %b %d %e %f %j %m", "Thu Feb 01  1  2 032 02")
               , ("%F %G %L %Y %V %u %Ep"      , "2001-02-01 2001 2001 2001 05 4 %Ep")
-              , ("|%2a| |%-2a| |%02a| |%-02a|", "|thu| |thu| |thu| |thu|")
-              , ("|%3a| |%-3a| |%03a| |%-03a|", "|thu| |thu| |thu| |thu|")
-              , ("|%4a| |%-4a| |%04a| |%-04a|", "| thu| |thu | |0thu| |thu |")
-              , ("|%5a| |%-5a| |%05a| |%-05a|", "|  thu| |thu  | |00thu| |thu  |")
+              , ("|%2a| |%-2a| |%02a| |%-02a|", "|Thu| |Thu| |Thu| |Thu|")
+              , ("|%3a| |%-3a| |%03a| |%-03a|", "|Thu| |Thu| |Thu| |Thu|")
+              , ("|%4a| |%-4a| |%04a| |%-04a|", "| Thu| |Thu | |0Thu| |Thu |")
+              , ("|%5a| |%-5a| |%05a| |%-05a|", "|  Thu| |Thu  | |00Thu| |Thu  |")
               , ("|%5u| |%-5u| |%05u| |%-05u|", "|    4| |4    | |00004| |4    |")
             );
 plan @tests.elems;

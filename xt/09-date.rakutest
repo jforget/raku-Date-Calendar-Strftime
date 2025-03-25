@@ -1,0 +1,12 @@
+use v6.d;
+use Test;
+use Date::Calendar::Strftime;
+
+plan 4;
+my Date $d .= new(2001, 3, 8);
+is(strftime($d, "%A %a %B %b"),       "Thursday Thu March Mar");
+is(strftime($d, "%A %a %B %b", "de"), "Donnerstag Do März Mär");
+is(strftime($d, "%A %a %B %b", "es"), "jueves jue marzo mar");
+is(strftime($d, "%A %a %B %b"),       "Thursday Thu March Mar");
+
+done-testing;

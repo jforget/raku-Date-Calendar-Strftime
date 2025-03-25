@@ -99,14 +99,14 @@ multi sub strftime(Date $date, Str $format, Str $locale = $date.?locale // 'en')
   my $class   = "Date::Names::$locale";
   my $m-index = $date.month       - 1;
   my $d-index = $date.day-of-week - 1;
-  my %names = A => $date-locale.dow($date.day-of-week).lc
-            , B => $date-locale.mon($date.month).lc
+  my %names = A => $date-locale.dow($date.day-of-week)
+            , B => $date-locale.mon($date.month)
             , a =>  ($::($class)::dow3[$d-index]
                   // $::($class)::dow2[$d-index]
-                  // $::($class)::dowa[$d-index]).lc
+                  // $::($class)::dowa[$d-index])
             , b =>  ($::($class)::mon3[$m-index]
                   // $::($class)::mon2[$m-index]
-                  // $::($class)::mona[$m-index]).lc
+                  // $::($class)::mona[$m-index])
              ;
   _strftime($date, $format, %names);
 }

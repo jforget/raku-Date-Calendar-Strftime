@@ -1,0 +1,25 @@
+use v6.d;
+use Test;
+use Date::Calendar::Strftime;
+use Date::Calendar::Gregorian;
+
+plan 12;
+my Date::Calendar::Gregorian $d0 .= new(2001, 3, 8);
+is(strftime($d0, "%A %a %B %b"),       "Thursday Thu March Mar");
+is(strftime($d0, "%A %a %B %b", "de"), "Donnerstag Do März Mär");
+is(strftime($d0, "%A %a %B %b", "es"), "jueves jue marzo mar");
+is(strftime($d0, "%A %a %B %b"),       "Thursday Thu March Mar");
+
+my Date::Calendar::Gregorian $d1 .= new(2001, 3, 8, locale => 'nl');
+is(strftime($d1, "%A %a %B %b"),       "donderdag don maart maa");
+is(strftime($d1, "%A %a %B %b", "de"), "Donnerstag Do März Mär");
+is(strftime($d1, "%A %a %B %b", "es"), "jueves jue marzo mar");
+is(strftime($d1, "%A %a %B %b"),       "donderdag don maart maa");
+
+$d1.locale = 'fr';
+is(strftime($d1, "%A %a %B %b"),       "jeudi jeu mars MS");
+is(strftime($d1, "%A %a %B %b", "de"), "Donnerstag Do März Mär");
+is(strftime($d1, "%A %a %B %b", "es"), "jueves jue marzo mar");
+is(strftime($d1, "%A %a %B %b"),       "jeudi jeu mars MS");
+
+done-testing;
