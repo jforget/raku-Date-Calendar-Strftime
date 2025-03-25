@@ -87,40 +87,44 @@ sub reformat(Str $string, $fmt) {
 }
 
 method strftime($self: Str $format) {
+  _strftime($self, $format);
+}
+
+sub _strftime($date, Str $format) {
   my %formatter = %(
                       # not a method
                       n => -> { "\n" },
                       t => -> { "\t" },
                       # raw or processed mandatory method
-                      d => -> { sprintf("%02d", $.day) },
-                      e => -> { sprintf("%2d",  $.day) },
-                      f => -> { sprintf("%2d",  $.month) },
-                      j => -> { sprintf("%03d", $.day-of-year) },
-                      L => -> { warn("'%L' strftime specifier is deprecated"); sprintf("%04d", $.year) },
-                      m => -> { sprintf("%02d", $.month) },
-                      Y => -> { sprintf("%04d", $.year) },
+                      d => -> { sprintf("%02d", $date.day) },
+                      e => -> { sprintf("%2d",  $date.day) },
+                      f => -> { sprintf("%2d",  $date.month) },
+                      j => -> { sprintf("%03d", $date.day-of-year) },
+                      L => -> { warn("'%L' strftime specifier is deprecated"); sprintf("%04d", $date.year) },
+                      m => -> { sprintf("%02d", $date.month) },
+                      Y => -> { sprintf("%04d", $date.year) },
                       # recursion on mandatory methods
-                      F => -> { $.strftime("%Y-%m-%d") },
+                      F => -> { $date.strftime("%Y-%m-%d") },
                       # raw optional method falling back to nil
-                      a => -> { $self.?day-abbr   },
-                      A => -> { $self.?day-name   },
-                      b => -> { $self.?month-abbr },
-                      B => -> { $self.?month-name },
+                      a => -> { $date.?day-abbr   },
+                      A => -> { $date.?day-name   },
+                      b => -> { $date.?month-abbr },
+                      B => -> { $date.?month-name },
                       # processed optional method falling back to nil
-                      u  => -> { if $.can('day-of-week') { sprintf("%d",   $.day-of-week) } else { Nil } },
-                      V  => -> { if $.can('week-number') { sprintf("%02d", $.week-number) } else { Nil } },
-                      Ep => -> { if $.can('daypart'    ) { substr("☾☼☽"  , $.daypart,  1) } else { Nil } },
+                      u  => -> { if $date.can('day-of-week') { sprintf("%d",   $date.day-of-week) } else { Nil } },
+                      V  => -> { if $date.can('week-number') { sprintf("%02d", $date.week-number) } else { Nil } },
+                      Ep => -> { if $date.can('daypart'    ) { substr("☾☼☽"  , $date.daypart,  1) } else { Nil } },
                       # processed optional method falling back to a mandatory method
-                      G  => -> { sprintf("%04d", ($self.?week-year // $self.year)) },
+                      G  => -> { sprintf("%04d", ($date.?week-year // $date.year)) },
                    );
   %formatter<%> = -> { '%' };
   my @res = gather prt-format.parse($format, actions => re-format.new);
   @res ==> map -> $fmt { my Str $res; # Result string
                          my     $fnc; # Formatter function
                          my     %dispatch = %(); # empty specific dispatch table
-                         if $.can('specific-format') {
+                         if $date.can('specific-format') {
                            # specific dispatch table with some stuff in it
-                           %dispatch = $.specific-format;
+                           %dispatch = $date.specific-format;
                          }
                          if $fmt<string>:!exists {
                            my $key1 = $fmt<alternate> ~ $fmt<type>;
