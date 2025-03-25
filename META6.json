@@ -5,7 +5,9 @@
     "Jean Forget"
   ],
   "build-depends" : [ ],
-  "depends" : [ ],
+  "depends"       : [
+      "Date::Names"
+  ],
   "description" : "formatting any Date object or Date::Calendar::whatever object with 'strftime'",
   "license"     : "Artistic-2.0",
   "name"        : "Date::Calendar::Strftime",

@@ -1,4 +1,5 @@
 use v6.d;
+use Date::Names;
 unit role Date::Calendar::Strftime:ver<0.1.1>:auth<zef:jforget>:api<1>;
 
 sub before-sunrise is export {
@@ -86,11 +87,35 @@ sub reformat(Str $string, $fmt) {
   }
 }
 
-method strftime($self: Str $format) {
-  _strftime($self, $format);
+multi sub strftime($date is copy where * does Date::Calendar::Strftime, Str $format, Str $locale = $date.?locale // 'en') is export {
+  if $date.can('locale') {
+    $date.locale = $locale;
+  }
+  return _strftime($date, $format, %());
 }
 
-sub _strftime($date, Str $format) {
+multi sub strftime(Date $date, Str $format, Str $locale = $date.?locale // 'en') is export {
+  my Date::Names $date-locale .= new(lang => $locale);
+  my $class   = "Date::Names::$locale";
+  my $m-index = $date.month       - 1;
+  my $d-index = $date.day-of-week - 1;
+  my %names = A => $date-locale.dow($date.day-of-week).lc
+            , B => $date-locale.mon($date.month).lc
+            , a =>  ($::($class)::dow3[$d-index]
+                  // $::($class)::dow2[$d-index]
+                  // $::($class)::dowa[$d-index]).lc
+            , b =>  ($::($class)::mon3[$m-index]
+                  // $::($class)::mon2[$m-index]
+                  // $::($class)::mona[$m-index]).lc
+             ;
+  _strftime($date, $format, %names);
+}
+
+method strftime($self: Str $format) {
+  _strftime($self, $format, %());
+}
+
+sub _strftime($date, Str $format, %names) {
   my %formatter = %(
                       # not a method
                       n => -> { "\n" },
@@ -104,12 +129,12 @@ sub _strftime($date, Str $format) {
                       m => -> { sprintf("%02d", $date.month) },
                       Y => -> { sprintf("%04d", $date.year) },
                       # recursion on mandatory methods
-                      F => -> { $date.strftime("%Y-%m-%d") },
-                      # raw optional method falling back to nil
-                      a => -> { $date.?day-abbr   },
-                      A => -> { $date.?day-name   },
-                      b => -> { $date.?month-abbr },
-                      B => -> { $date.?month-name },
+                      F  => -> { _strftime($date, "%Y-%m-%d", %names) },
+                      # specific name falling back to raw optional method falling back to nil
+                      a  => -> { %names<a> // $date.?day-abbr   },
+                      A  => -> { %names<A> // $date.?day-name   },
+                      b  => -> { %names<b> // $date.?month-abbr },
+                      B  => -> { %names<B> // $date.?month-name },
                       # processed optional method falling back to nil
                       u  => -> { if $date.can('day-of-week') { sprintf("%d",   $date.day-of-week) } else { Nil } },
                       V  => -> { if $date.can('week-number') { sprintf("%02d", $date.week-number) } else { Nil } },
