@@ -1,0 +1,31 @@
+use v6.d;
+use Test;
+use Date::Calendar::Strftime;
+use Date::Calendar::Gregorian;
+use Date::Calendar::Julian;
+
+plan 15;
+#my Date::Calendar::Julian $d0 .= new(2001, 3, 8);
+my Date::Calendar::Julian $d0 .= new(year => 2001, month => 3, day => 8);
+is(strftime($d0, "%A %a %B %b"),       "Wednesday Wed March Mar");
+is(strftime($d0, "%A %a %B %b", "de"), "Mittwoch Mi März Mär");
+is(strftime($d0, "%A %a %B %b", "es"), "miércoles mié marzo mar");
+is(strftime($d0, "%A %a %B %b"),       "Wednesday Wed March Mar");
+is($d0.locale, 'en');
+
+#my Date::Calendar::Gregorian $d1 .= new(2001, 3, 8, locale => 'nl');
+my Date::Calendar::Julian $d1 .= new(year => 2001, month => 3, day => 8, locale => 'nl');
+is(strftime($d1, "%A %a %B %b"),       "woensdag woe maart maa");
+is(strftime($d1, "%A %a %B %b", "de"), "Mittwoch Mi März Mär");
+is(strftime($d1, "%A %a %B %b", "es"), "miércoles mié marzo mar");
+is(strftime($d1, "%A %a %B %b"),       "woensdag woe maart maa");
+is($d1.locale, 'nl');
+
+$d1.locale = 'fr';
+is(strftime($d1, "%A %a %B %b"),       "mercredi mer mars MS");
+is(strftime($d1, "%A %a %B %b", "de"), "Mittwoch Mi März Mär");
+is(strftime($d1, "%A %a %B %b", "es"), "miércoles mié marzo mar");
+is(strftime($d1, "%A %a %B %b"),       "mercredi mer mars MS");
+is($d1.locale, 'fr');
+
+done-testing;

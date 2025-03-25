@@ -87,11 +87,17 @@ sub reformat(Str $string, $fmt) {
   }
 }
 
-multi sub strftime($date is copy where * does Date::Calendar::Strftime, Str $format, Str $locale = $date.?locale // 'en') is export {
+multi sub strftime($date where * does Date::Calendar::Strftime, Str $format, Str $locale = $date.?locale // 'en') is export {
+  my Str $old-locale;
   if $date.can('locale') {
+    $old-locale  = $date.locale;
     $date.locale = $locale;
   }
-  return _strftime($date, $format, %());
+  my Str $result = _strftime($date, $format, %());
+  if $date.can('locale') {
+    $date.locale = $old-locale;
+  }
+  return $result;
 }
 
 multi sub strftime(Date $date, Str $format, Str $locale = $date.?locale // 'en') is export {
