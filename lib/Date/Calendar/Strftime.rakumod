@@ -184,31 +184,20 @@ Date::Calendar::Strftime - formatting any Date object or Date::Calendar::whateve
 
 =head1 SYNOPSIS
 
-This example uses the C<Date> core module
+Using the C<strftime> function with the core class C<Date>:
 
 =begin code :lang<raku>
 
 use Date::Calendar::Strftime;
 my Date $last-day .= new(2019, 12, 31);
-$last-day does Date::Calendar::Strftime;
-say $last-day.strftime("%Y-%m-%d %G-W%V-%u");
+
+say strftime($last-day, "%Y-%m-%d %G-W%V-%u");
 # --> 2019-12-31 2020-W01-2
 
 =end code
 
-If the C<Date::Calendar::Gregorian> class is installed,
-the same example can be simplified:
 
-=begin code :lang<raku>
-
-use Date::Calendar::Gregorian;
-my  Date::Calendar::Gregorian $last-day .= new(2019, 12, 31);
-say $last-day.strftime("%Y-%m-%d %G-W%V-%u");
-# --> 2019-12-31 2020-W01-2
-
-=end code
-
-Another example, with the French Revolutionary calendar
+Using the C<strftime> method, with the French Revolutionary calendar
 
 =begin code :lang<raku>
 
@@ -227,8 +216,8 @@ say $Bonaparte's-coup-fr.strftime("%A %e %B %EY");
 
 =head1 DESCRIPTION
 
-Date::Calendar::Strftime is  a role providing a  C<strftime> method to
-format a string  representing the date. This method is  similar to the
+C<Date::Calendar::Strftime> is  a role providing a  C<strftime> method  and a C<strftime> function to
+format a string  representing the date. This method and this function are similar to the
 C<strftime> function in C.
 
 This role automatically applies to any C<Date::Calendar::>R<xxx> class
@@ -236,12 +225,35 @@ and can be manually applied to instances of the C<Date> core class.
 
 =head2 Usage with the core class
 
-Some code is  required to use this module wih  the core C<Date> class.
-There  are two  variants. The  first  variant, shown  in the  synopsis
-above,  assigns the  C<Date::Calendar::Srftime> role  to each  C<Date>
+The simplest  way to use  C<strftime> with  the code class  C<Date> is
+using the function and not bothering with the method.
+
+=begin code :lang<raku>
+
+use Date::Calendar::Strftime;
+my Date $last-day .= new(2019, 12, 31);
+
+say strftime($last-day, "%A %d %B %Y", "en");
+# --> Tuesday 31 December 2019
+
+=end code
+
+Using the method  wih the core C<Date> class  requires some convoluted
+code.  There  are   two  variants.  The  first   variant  assigns  the
+C<Date::Calendar::Srftime> role to each C<Date>
 instance  separately. The  second  variant, shown  below, declares  an
 empty   class  which   merges  the   core  C<Date>   class  with   the
 C<Date::Calendar::Srftime> role.
+
+=begin code :lang<raku>
+
+use Date::Calendar::Strftime;
+my Date $last-day .= new(2019, 12, 31);
+$last-day does Date::Calendar::Strftime;
+say $last-day.strftime("%Y-%m-%d ('ISO' date %G-W%V-%u)");
+# --> 2019-12-31 ('ISO' date 2020-W01-2)
+
+=end code
 
 =begin code :lang<raku>
 
@@ -267,7 +279,12 @@ Exceptions:  early versions  of C<Date::Calendar::FrenchRevolutionary>
 and  C<Date::Calendar::Hebrew>  do not  include  the  loading of  this
 module and are only partially compatible with it.
 
+Both  the  C<strftime>  method   and  the  C<strftime>  functions  are
+available with the C<Date::Calendar::>R<xxx> instances.
+
 =head1 EXPORTED SUBROUTINES
+
+=head2 Day Parts
 
 The module C<Date::Calendar::Strftime> exports three routines:
 
@@ -283,6 +300,32 @@ values for the same meaning.
 These three  subroutines are similar  to an C<enum>  type declaration,
 with   a   different   scope   (they    must   be   visible   in   the
 C<Date::Calendar::>R<xxx> modules and in the calling programs).
+
+=head2 C<strftime> function
+
+The C<strftime> function receives three positional parameters:
+
+=item the date instance, mandatory
+=item the format string, mandatory
+=item the locale code, optional.
+
+The  date instance  is an  instance of  the core  class C<Date>  or an
+instance or a class C<Date::Calendar::>R<xxx>.
+
+The format  string is  described below, in  the documentation  for the
+method.
+
+For the  core class C<Date>,  the locale  parameter can use  any value
+defined in C<Dates::Names>. If no value is given, the default value is
+C<'en'> for English.
+
+For  C<Date::Calendar::>R<xxx> classes  with only  one locale  (Hebrew
+Hijri, Coptic, Ethiopic, Persian), the locale parameter is ignored.
+
+For  C<Date::Calendar::>R<xxx> classes  with several  possible locales
+(Gregorian, Julian,  Maya, Aztec,  French Revolutionary,  Baháʼí), the
+locale  parameter defaults  to  the C<locale>  attribute  of the  date
+instance.
 
 =head1 METHOD
 

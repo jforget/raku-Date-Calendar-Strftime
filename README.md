@@ -6,31 +6,21 @@ Date::Calendar::Strftime - formatting any Date object or any Date::Calendar::wha
 SYNOPSIS
 ========
 
-Using the core class Date:
+Using the `strftime` function with the core class Date:
 
 ```
 use Date::Calendar::Strftime;
-my Date $last-day .= new(2019, 12, 31);
-$last-day does Date::Calendar::Strftime;
-say $last-day.strftime("%Y-%m-%d ('ISO' date %G-W%V-%u)");
+my  Date $last-day .= new(2019, 12, 31);
+
+say strftime($last-day, "%Y-%m-%d ('ISO' date %G-W%V-%u)");
 # --> 2019-12-31 ('ISO' date 2020-W01-2)
 ```
 
-A bit  simpler, using a class  that inherits from the  core class Date
-and links it with `strftime`
-
-```
-use Date::Calendar::Gregorian;
-my Date::Calendar::Gregorian $last-day .= new(2019, 12, 31);
-say $last-day.strftime("%Y-%m-%d ('ISO' date %G-W%V-%u)");
-# --> 2019-12-31 ('ISO' date 2020-W01-2)
-```
-
-Using another Date::Calendar::xxx class (here, the French Revolutionary one):
+Using the `strftime` method with a Date::Calendar::xxx class (here, the French Revolutionary one):
 
 ```
 use Date::Calendar::FrenchRevolutionary;
-my Date::Calendar::FrenchRevolutionary $Bonaparte's-coup-fr;
+my  Date::Calendar::FrenchRevolutionary $Bonaparte's-coup-fr;
 $Bonaparte's-coup-fr .= new(year => 8, month => 2, day => 18);
 
 say $Bonaparte's-coup-fr.strftime("%Y-%m-%d");
@@ -58,12 +48,12 @@ zef install .
 DESCRIPTION
 ===========
 
-Date::Calendar::Strftime  is a  role  providing a  strftime method  to
+Date::Calendar::Strftime  is a  role  providing a `strftime` method and a `strftime` function to
 format a string  representing the date. This method is  similar to the
-strftime function in C.
+`strftime` function in C.
 
 The synopsis above shows examples with the standard class Date and
-with specific classes Date::Calendar::Gregorian and
+with specific class
 Date::Calendar::FrenchRevolutionary, but Date::Calendar::Strftime can
 be used with any Date::Calendar::xxxx class which implements the
 attributes "year", "month" and "day". It can be used with a little
