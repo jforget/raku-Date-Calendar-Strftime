@@ -269,6 +269,11 @@ say $last-day.strftime("%Y-%m-%d %G-W%V-%u");
 Or  you  can use  the  C<Date::Calendar::Gregorian>  class instead  of
 C<Date>. See below.
 
+Note: if you need month names and day-of-week names, you cannot choose
+the locale when using the "does" version or the "My::Date" version. If
+using  the C<strftime>  function  or the  C<Date::Calendar::Gregorian>
+class, you can choose the locale.
+
 =head2 Usage with a C<Date::Calendar::>R<xxx> class
 
 C<Date::Calendar::Strftime>  is  automatically and  implicitly  loaded
@@ -279,8 +284,8 @@ Exceptions:  early versions  of C<Date::Calendar::FrenchRevolutionary>
 and  C<Date::Calendar::Hebrew>  do not  include  the  loading of  this
 module and are only partially compatible with it.
 
-Both  the  C<strftime>  method   and  the  C<strftime>  functions  are
-available with the C<Date::Calendar::>R<xxx> instances.
+Both the C<strftime> method and the C<strftime> function are available
+with the C<Date::Calendar::>R<xxx> instances.
 
 =head1 EXPORTED SUBROUTINES
 
@@ -702,7 +707,7 @@ the Coptic calendar  and the Ethiopic calendar. A  difference with the
 Gregorian calendar is that in  threse three calendars weeks are Sunday
 → Saturday  spans. So  we can  define rules  similar to  the Gregorian
 calendar's ISO date rules, but there, Wednesday / Yom Reviʻi / Peftoou
-/ Hamus play a central role  (pun intended) instead of Thursday. Also,
+/ Rob  play a central role  (pun intended) instead of  Thursday. Also,
 for the Hebrew calendar, the number range for week numbers will not be
 1..52 or 1..53, but 1..50, 1..51, 1..55 or 1..56 depending on the type
 of the year.
